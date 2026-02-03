@@ -1,0 +1,24 @@
+FROM backpackapp/build:v0.30.1
+
+# Fix SSL issues and install wget
+RUN apt-get update && apt-get install -y ca-certificates wget && update-ca-certificates
+
+# Install fresh Rust (System) - Environment
+ENV RUSTUP_HOME=/opt/rustup
+ENV CARGO_HOME=/opt/cargo
+ENV PATH="/opt/cargo/bin:${PATH}"
+
+# Install Rust
+RUN curl -k --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+# Install Solana v2.0.0 using wget (more robust than curl for some SSL issues)
+RUN wget --no-check-certificate https://release.solana.com/v2.0.0/install -O install_solana.sh && \
+    sh install_solana.sh v2.0.0 && \
+    rm install_solana.sh
+
+ENV PATH="/root/.local/share/solana/install/active_release/bin:${PATH}"
+
+# Verify versions
+RUN rustc --version && cargo --version && solana --version && anchor --version
+
+WORKDIR /workdir

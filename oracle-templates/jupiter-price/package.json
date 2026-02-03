@@ -1,0 +1,16 @@
+{
+  "name": "pyxis-jupiter-oracle",
+  "version": "1.0.0",
+  "description": "Jupiter price oracle bot for Pyxis Protocol",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.0",
+    "@coral-xyz/anchor": "0.29.0",
+    "express": "^4.18.2"
+  }
+}

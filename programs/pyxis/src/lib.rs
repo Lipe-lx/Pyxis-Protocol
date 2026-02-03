@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws");
+declare_id!("EC62edGAHGf6tNA7MnKpJ3Bebu8XAwMmuQvN94N62i8Q");
 
 #[program]
 pub mod pyxis {
@@ -30,7 +30,7 @@ pub mod pyxis {
         oracle.successful_queries = 0;
         oracle.created_at = Clock::get()?.unix_timestamp;
         oracle.is_active = true;
-        oracle.bump = ctx.bumps.oracle;
+        oracle.bump = *ctx.bumps.get("oracle").unwrap();
 
         // Transfer stake to vault
         let cpi_context = CpiContext::new(

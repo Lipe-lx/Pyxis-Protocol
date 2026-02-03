@@ -5,14 +5,14 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-pyxis = "8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws"
+pyxis = "EC62edGAHGf6tNA7MnKpJ3Bebu8XAwMmuQvN94N62i8Q"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Devnet"
-wallet = "~/.config/solana/id.json"
+cluster = "devnet"
+wallet = "./target/deploy/authority.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

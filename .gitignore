@@ -1,22 +1,23 @@
 # Dependencies
 node_modules/
-target/
+**/node_modules/
 
 # Anchor
 .anchor/
 
 # Build
 dist/
+**/dist/
 *.so
 
-# IDL (generated)
-# Keep these in git for SDK consumers
-# target/idl/
-# target/types/
+# target
+target/
+**/target/
 
 # Environment
 .env
 .env.local
+**/ .env*
 
 # IDE
 .idea/
@@ -36,8 +37,18 @@ npm-debug.log*
 .nyc_output/
 coverage/
 
-# Keys (never commit!)
+# Keys (NEVER COMMIT!)
 *.json
+**/*.json
 !package.json
+!**/package.json
 !tsconfig.json
+!**/tsconfig.json
+!idl.json
+!**/idl.json
 !Anchor.toml
+
+# Exclude specific sensitive files just in case
+**/*keypair.json
+**/secret.json
+**/credentials.json

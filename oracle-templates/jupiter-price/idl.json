@@ -1,0 +1,60 @@
+{
+  "version": "0.1.0",
+  "name": "pyxis",
+  "instructions": [
+    {
+      "name": "registerOracle",
+      "accounts": [
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "oracle", "isMut": true, "isSigner": false },
+        { "name": "stakeVault", "isMut": true, "isSigner": false },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "name", "type": "string" },
+        { "name": "mcpEndpoint", "type": "string" },
+        { "name": "dataType", "type": "string" },
+        { "name": "stakeAmount", "type": "u64" }
+      ]
+    },
+    {
+      "name": "recordQuery",
+      "accounts": [
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "oracle", "isMut": true, "isSigner": false }
+      ],
+      "args": [
+        { "name": "queryId", "type": "string" },
+        { "name": "paymentAmount", "type": "u64" }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Oracle",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "authority", "type": "publicKey" },
+          { "name": "name", "type": "string" },
+          { "name": "mcpEndpoint", "type": "string" },
+          { "name": "dataType", "type": "string" },
+          { "name": "stakeAmount", "type": "u64" },
+          { "name": "reputationScore", "type": "u16" },
+          { "name": "queriesServed", "type": "u64" },
+          { "name": "successfulQueries", "type": "u64" },
+          { "name": "createdAt", "type": "i64" },
+          { "name": "isActive", "type": "bool" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    { "code": 6000, "name": "NameTooLong", "msg": "Oracle name too long (max 32 chars)" },
+    { "code": 6001, "name": "EndpointTooLong", "msg": "MCP endpoint too long (max 128 chars)" },
+    { "code": 6002, "name": "InsufficientStake", "msg": "Insufficient stake amount (min 0.1 SOL)" },
+    { "code": 6003, "name": "OracleInactive", "msg": "Oracle is inactive" },
+    { "code": 6004, "name": "OracleStillActive", "msg": "Oracle is still active, deactivate first" }
+  ]
+}
