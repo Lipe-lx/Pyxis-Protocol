@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("CLiuE3SjVt3DdLXjuyKsvsZBcykWs6mf4wTAuMZeuRfa");
+declare_id!("8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws");
 
 #[program]
 pub mod pyxis {

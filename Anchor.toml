@@ -1,15 +1,17 @@
+[toolchain]
+
 [features]
-seeds = false
+resolution = true
 skip-lint = false
 
 [programs.devnet]
-pyxis = "CLiuE3SjVt3DdLXjuyKsvsZBcykWs6mf4wTAuMZeuRfa"
+pyxis = "8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+cluster = "Devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
