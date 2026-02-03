@@ -1,19 +1,20 @@
 import { Connection, PublicKey, Transaction, SystemProgram } from '@solana/web3.js';
 import * as anchor from '@coral-xyz/anchor';
+const { BN } = anchor;
 
 /**
  * Pyxis SDK ♠️
  * 
- * A client-side library for agents to interact with the Pyxis Oracle Protocol.
+ * The primary interface for agents to launch, scale, and monetize custom oracles.
  */
 export class PyxisClient {
-  public program: any;
+  public program: anchor.Program;
   public connection: Connection;
   public programId: PublicKey;
 
   constructor(
     connection: Connection,
-    wallet: any,
+    wallet: anchor.Wallet,
     idl: any,
     programId: string = 'EC62edGAHGf6tNA7MnKpJ3Bebu8XAwMmuQvN94N62i8Q'
   ) {
@@ -42,16 +43,65 @@ export class PyxisClient {
   }
 
   /**
+   * Derive the PDA for the stake vault
+   */
+  public getVaultPda(oraclePda: PublicKey): [PublicKey, number] {
+    return PublicKey.findProgramAddressSync(
+      [Buffer.from('vault'), oraclePda.toBuffer()],
+      this.programId
+    );
+  }
+
+  /**
+   * Register a new oracle by minting an identity NFT
+   */
+  public async registerOracle(
+    name: string,
+    endpoint: string,
+    dataType: string,
+    stakeAmountSOL: number
+  ) {
+    const [oraclePda] = this.getOraclePda(this.program.provider.publicKey!, name);
+    const [vaultPda] = this.getVaultPda(oraclePda);
+    const stakeAmount = new BN(stakeAmountSOL * 1000000000);
+
+    return await this.program.methods
+      .registerOracle(name, endpoint, dataType, stakeAmount)
+      .accounts({
+        authority: this.program.provider.publicKey,
+        oracle: oraclePda,
+        stakeVault: vaultPda,
+        systemProgram: SystemProgram.programId,
+      })
+      .rpc();
+  }
+
+  /**
+   * Record a successful query served (Sync reputation)
+   */
+  public async recordQuery(oraclePda: PublicKey, queryId: string, paymentAmountSOL: number = 0) {
+    const paymentAmount = new BN(paymentAmountSOL * 1000000000);
+    
+    return await this.program.methods
+      .recordQuery(queryId, paymentAmount)
+      .accounts({
+        authority: this.program.provider.publicKey,
+        oracle: oraclePda,
+      })
+      .rpc();
+  }
+
+  /**
    * Find all registered oracles
    */
-  public async listOracles(): Promise<any[]> {
+  public async listOracles() {
     return await this.program.account.oracle.all();
   }
 
   /**
    * Get specific oracle data
    */
-  public async getOracle(pda: PublicKey): Promise<any> {
+  public async getOracle(pda: PublicKey) {
     return await this.program.account.oracle.fetch(pda);
   }
 
@@ -78,28 +128,5 @@ export class PyxisClient {
     }
     
     return await response.json();
-  }
-
-  /**
-   * Prepare an x402 payment transaction
-   */
-  public async createPaymentTransaction(
-    consumer: PublicKey,
-    oracleWallet: PublicKey,
-    amountLamports: number
-  ): Promise<Transaction> {
-    const tx = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: consumer,
-        toPubkey: oracleWallet,
-        lamports: amountLamports,
-      })
-    );
-    
-    const { blockhash } = await this.connection.getLatestBlockhash();
-    tx.recentBlockhash = blockhash;
-    tx.feePayer = consumer;
-    
-    return tx;
   }
 }
