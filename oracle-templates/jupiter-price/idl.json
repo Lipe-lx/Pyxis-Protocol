@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "pyxis",
   "instructions": [
     {
@@ -27,6 +27,23 @@
         { "name": "queryId", "type": "string" },
         { "name": "paymentAmount", "type": "u64" }
       ]
+    },
+    {
+      "name": "sendHeartbeat",
+      "accounts": [
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "oracle", "isMut": true, "isSigner": false }
+      ],
+      "args": []
+    },
+    {
+      "name": "slashInactiveOracle",
+      "accounts": [
+        { "name": "reporter", "isMut": true, "isSigner": true },
+        { "name": "oracle", "isMut": true, "isSigner": false },
+        { "name": "stakeVault", "isMut": true, "isSigner": false }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -43,6 +60,8 @@
           { "name": "reputationScore", "type": "u16" },
           { "name": "queriesServed", "type": "u64" },
           { "name": "successfulQueries", "type": "u64" },
+          { "name": "lastHeartbeat", "type": "i64" },
+          { "name": "heartbeatInterval", "type": "i64" },
           { "name": "createdAt", "type": "i64" },
           { "name": "isActive", "type": "bool" },
           { "name": "bump", "type": "u8" }
@@ -55,6 +74,6 @@
     { "code": 6001, "name": "EndpointTooLong", "msg": "MCP endpoint too long (max 128 chars)" },
     { "code": 6002, "name": "InsufficientStake", "msg": "Insufficient stake amount (min 0.1 SOL)" },
     { "code": 6003, "name": "OracleInactive", "msg": "Oracle is inactive" },
-    { "code": 6004, "name": "OracleStillActive", "msg": "Oracle is still active, deactivate first" }
+    { "code": 6004, "name": "OracleStillActive", "msg": "Oracle is still active" }
   ]
 }

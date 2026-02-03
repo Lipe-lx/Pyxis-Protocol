@@ -92,6 +92,19 @@ export class PyxisClient {
   }
 
   /**
+   * Send a heartbeat to prove liveness
+   */
+  public async sendHeartbeat(oraclePda: PublicKey) {
+    return await this.program.methods
+      .sendHeartbeat()
+      .accounts({
+        authority: this.program.provider.publicKey,
+        oracle: oraclePda,
+      })
+      .rpc();
+  }
+
+  /**
    * Find all registered oracles
    */
   public async listOracles() {

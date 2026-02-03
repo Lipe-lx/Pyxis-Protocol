@@ -33,6 +33,7 @@ Pyxis is designed for composability with the leading agent protocols:
 - **Memory**: [AgentMemory](https://agentmemory.io) for persistent, auditable accuracy logs.
 - **Execution**: [AgentDEX](https://agentdex.io) for execution-accurate price feeds and seamless payment rails.
 - **Liveness**: **Solana Clockwork** for automated on-chain heartbeat monitoring and uptime accountability.
+- **Standardization**: [Standardized MCP Oracle Spec](./docs/standard-mcp-oracle-spec.md) for agent-to-agent data envelopes.
 
 ---
 

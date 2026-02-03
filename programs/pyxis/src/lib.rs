@@ -28,9 +28,11 @@ pub mod pyxis {
         oracle.reputation_score = 100; // Start with neutral reputation
         oracle.queries_served = 0;
         oracle.successful_queries = 0;
+        oracle.last_heartbeat = Clock::get()?.unix_timestamp;
+        oracle.heartbeat_interval = 300; // 5 minutes default
         oracle.created_at = Clock::get()?.unix_timestamp;
         oracle.is_active = true;
-        oracle.bump = *ctx.bumps.get("oracle").unwrap();
+        oracle.bump = ctx.bumps.oracle;
 
         // Transfer stake to vault
         let cpi_context = CpiContext::new(
@@ -127,6 +129,55 @@ pub mod pyxis {
 
         Ok(())
     }
+
+    /// Send a heartbeat to prove liveness
+    pub fn send_heartbeat(ctx: Context<SendHeartbeat>) -> Result<()> {
+        let oracle = &mut ctx.accounts.oracle;
+        require!(oracle.is_active, PyxisError::OracleInactive);
+
+        let now = Clock::get()?.unix_timestamp;
+        oracle.last_heartbeat = now;
+
+        emit!(HeartbeatEvent {
+            oracle: oracle.key(),
+            timestamp: now,
+        });
+
+        Ok(())
+    }
+
+    /// Slash an inactive oracle (Bounty for the reporter)
+    pub fn slash_inactive_oracle(ctx: Context<SlashInactive>) -> Result<()> {
+        let oracle = &mut ctx.accounts.oracle;
+        let now = Clock::get()?.unix_timestamp;
+
+        // Require at least 3 intervals missed
+        let time_since_heartbeat = now - oracle.last_heartbeat;
+        require!(
+            time_since_heartbeat > oracle.heartbeat_interval * 3,
+            PyxisError::OracleStillActive
+        );
+
+        let penalty = oracle.stake_amount / 10; // 10% slash
+        oracle.stake_amount -= penalty;
+        oracle.reputation_score = oracle.reputation_score.saturating_sub(100);
+        
+        if oracle.reputation_score < 20 {
+            oracle.is_active = false;
+        }
+
+        // Transfer penalty to reporter as reward
+        **ctx.accounts.stake_vault.try_borrow_mut_lamports()? -= penalty;
+        **ctx.accounts.reporter.try_borrow_mut_lamports()? += penalty;
+
+        emit!(OracleSlashed {
+            oracle: oracle.key(),
+            reporter: ctx.accounts.reporter.key(),
+            amount: penalty,
+        });
+
+        Ok(())
+    }
 }
 
 // === Constants ===
@@ -149,6 +200,8 @@ pub struct Oracle {
     pub reputation_score: u16,
     pub queries_served: u64,
     pub successful_queries: u64,
+    pub last_heartbeat: i64,
+    pub heartbeat_interval: i64,
     pub created_at: i64,
     pub is_active: bool,
     pub bump: u8,
@@ -224,6 +277,35 @@ pub struct WithdrawStake<'info> {
     pub stake_vault: AccountInfo<'info>,
 }
 
+#[derive(Accounts)]
+pub struct SendHeartbeat<'info> {
+    #[account(mut)]
+    pub authority: Signer<'info>,
+
+    #[account(
+        mut,
+        has_one = authority,
+    )]
+    pub oracle: Account<'info, Oracle>,
+}
+
+#[derive(Accounts)]
+pub struct SlashInactive<'info> {
+    #[account(mut)]
+    pub reporter: Signer<'info>,
+
+    #[account(mut)]
+    pub oracle: Account<'info, Oracle>,
+
+    /// CHECK: Vault holding staked SOL
+    #[account(
+        mut,
+        seeds = [b"vault", oracle.key().as_ref()],
+        bump
+    )]
+    pub stake_vault: AccountInfo<'info>,
+}
+
 // === Events ===
 
 #[event]
@@ -256,6 +338,19 @@ pub struct OracleReported {
 pub struct StakeWithdrawn {
     pub oracle: Pubkey,
     pub authority: Pubkey,
+    pub amount: u64,
+}
+
+#[event]
+pub struct HeartbeatEvent {
+    pub oracle: Pubkey,
+    pub timestamp: i64,
+}
+
+#[event]
+pub struct OracleSlashed {
+    pub oracle: Pubkey,
+    pub reporter: Pubkey,
     pub amount: u64,
 }
 

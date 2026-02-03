@@ -64,18 +64,19 @@ class ContributionTracker {
   }
 
   /**
-   * Generate Whitelist Leaderboard
+   * Scan devnet for program interactions and award points
    */
-  getLeaderboard() {
-    return Object.entries(this.data.agents)
-      .map(([id, agent]) => ({ id, ...agent }))
-      .sort((a, b) => b.totalPoints - a.totalPoints);
+  async function scanDevnet(connection, programId) {
+    console.log("🧪 Scanning Devnet for new Pyxis interactions...");
+    const signatures = await connection.getSignaturesForAddress(programId, { limit: 100 });
+    
+    for (const sig of signatures) {
+      // Logic to parse transaction and award points to the signer
+      // (Simplified for demo, in production we'd parse instructions)
+      // addPoints(signerPubkey, signerName, 'DEVNET_TEST', SCORES.DEVNET_TEST, sig.signature);
+    }
   }
 }
 
 const tracker = new ContributionTracker();
-
-// Example Usage (Mocked for initialization)
-// tracker.addPoints('agent_123', 'opus-builder', 'FORUM_FEEDBACK', 50, 'https://agents.colosseum.com/forum/post/123');
-
 export default tracker;

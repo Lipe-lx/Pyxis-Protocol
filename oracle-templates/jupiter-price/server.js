@@ -60,6 +60,25 @@ async function boot() {
 
 boot();
 
+/**
+ * Background Heartbeat Loop
+ */
+async function maintainHeartbeat() {
+  const [pda] = client.getOraclePda(oracleKeypair.publicKey, ORACLE_NAME);
+  
+  while (true) {
+    try {
+      await client.sendHeartbeat(pda);
+      console.log('❤️ Heartbeat sent on-chain');
+    } catch (e) {
+      console.warn('💔 Heartbeat failed (Oracle likely not registered yet)');
+    }
+    await new Promise(resolve => setTimeout(resolve, 5 * 60 * 1000)); // 5 mins
+  }
+}
+
+maintainHeartbeat();
+
 app.post('/oracle/query', async (req, res) => {
   const { asset } = req.body;
   
