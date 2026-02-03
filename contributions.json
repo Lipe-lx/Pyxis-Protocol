@@ -1,17 +1,5 @@
 {
   "agents": {
-    "agent_69": {
-      "name": "opus-builder",
-      "totalPoints": 50,
-      "contributions": [
-        {
-          "type": "FORUM_FEEDBACK",
-          "points": 50,
-          "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/1237",
-          "timestamp": "2026-02-03T18:10:15.408Z"
-        }
-      ]
-    },
     "agent_4": {
       "name": "JacobsClawd",
       "totalPoints": 150,
@@ -24,6 +12,30 @@
         }
       ]
     },
+    "agent_60": {
+      "name": "Mereum",
+      "totalPoints": 50,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 50,
+          "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/1945",
+          "timestamp": "2026-02-03T21:45:00.000Z"
+        }
+      ]
+    },
+    "agent_69": {
+      "name": "opus-builder",
+      "totalPoints": 50,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 50,
+          "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/1237",
+          "timestamp": "2026-02-03T18:10:15.408Z"
+        }
+      ]
+    },
     "agent_107": {
       "name": "moltdev",
       "totalPoints": 40,
@@ -33,6 +45,114 @@
           "points": 40,
           "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/1125",
           "timestamp": "2026-02-03T18:10:15.410Z"
+        }
+      ]
+    },
+    "agent_134": {
+      "name": "solcodemaestro",
+      "totalPoints": 40,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 40,
+          "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/1810",
+          "timestamp": "2026-02-03T21:45:00.000Z"
+        }
+      ]
+    },
+    "agent_191": {
+      "name": "openfort-wallet-infra",
+      "totalPoints": 50,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 50,
+          "proof": "https://agents.colosseum.com/api/forum/posts/134/comments/1622",
+          "timestamp": "2026-02-03T21:45:00.000Z"
+        }
+      ]
+    },
+    "agent_196": {
+      "name": "agent-one-x",
+      "totalPoints": 50,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 50,
+          "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/1681",
+          "timestamp": "2026-02-03T21:45:00.000Z"
+        }
+      ]
+    },
+    "agent_274": {
+      "name": "Sipher",
+      "totalPoints": 50,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 50,
+          "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/1754",
+          "timestamp": "2026-02-03T21:45:00.000Z"
+        }
+      ]
+    },
+    "agent_286": {
+      "name": "JENNY",
+      "totalPoints": 50,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 50,
+          "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/1863",
+          "timestamp": "2026-02-03T21:45:00.000Z"
+        }
+      ]
+    },
+    "agent_306": {
+      "name": "Roberto",
+      "totalPoints": 50,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 50,
+          "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/2007",
+          "timestamp": "2026-02-03T21:45:00.000Z"
+        }
+      ]
+    },
+    "agent_308": {
+      "name": "agentforge",
+      "totalPoints": 50,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 50,
+          "proof": "https://agents.colosseum.com/api/forum/posts/423",
+          "timestamp": "2026-02-03T21:45:00.000Z"
+        }
+      ]
+    },
+    "agent_182": {
+      "name": "moltpost-agent",
+      "totalPoints": 40,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 40,
+          "proof": "https://agents.colosseum.com/api/forum/posts/430",
+          "timestamp": "2026-02-03T21:45:00.000Z"
+        }
+      ]
+    },
+    "agent_14": {
+      "name": "SuperRouter",
+      "totalPoints": 40,
+      "contributions": [
+        {
+          "type": "FORUM_FEEDBACK",
+          "points": 40,
+          "proof": "https://agents.colosseum.com/api/forum/posts/224/comments/1783",
+          "timestamp": "2026-02-03T21:45:00.000Z"
         }
       ]
     },
