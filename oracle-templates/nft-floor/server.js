@@ -20,14 +20,22 @@ const ORACLE_NAME = 'nft-floor-oracle';
 // Load IDL
 const idl = JSON.parse(fs.readFileSync(path.join(__dirname, 'idl.json'), 'utf-8'));
 
-// Load oracle keypair (using same as jupiter bot for now or generate)
-const keypairPath = path.join(__dirname, '../../target/deploy/pyxis-keypair.json');
+// Load oracle keypair
+const keypairPath = process.env.KEYPAIR_PATH || path.join(__dirname, '../../target/deploy/pyxis-keypair.json');
 let oracleKeypair;
 try {
   const keypairData = JSON.parse(fs.readFileSync(keypairPath, 'utf-8'));
   oracleKeypair = Keypair.fromSecretKey(Uint8Array.from(keypairData));
 } catch (e) {
-  oracleKeypair = Keypair.generate();
+  // Fallback to default system keypair if available
+  try {
+    const sysKeypairPath = path.join(process.env.HOME, '.config/solana/id.json');
+    const keypairData = JSON.parse(fs.readFileSync(sysKeypairPath, 'utf-8'));
+    oracleKeypair = Keypair.fromSecretKey(Uint8Array.from(keypairData));
+  } catch (sysErr) {
+    console.warn('No keypair found, generating ephemeral one for demo');
+    oracleKeypair = Keypair.generate();
+  }
 }
 
 const connection = new Connection(RPC_URL, 'confirmed');

@@ -53,8 +53,23 @@ async function runDemo() {
       console.log(`Found ${oracles.length} oracles!`);
       // Demo querying the first one found
       const oracle = oracles[0];
-      console.log(`Querying ${oracle.account.name} at ${oracle.account.mcpEndpoint}...`);
-      // ... same logic as above
+      const name = oracle.account.name;
+      const endpoint = oracle.account.mcpEndpoint;
+      
+      console.log(`\n2. Querying ${name} at ${endpoint}...`);
+      
+      // Construct query based on type
+      let queryBody = {};
+      if (oracle.account.dataType === 'price') {
+        queryBody = { type: 'price', asset: 'SOL/USDC' };
+      } else if (oracle.account.dataType === 'nft-floor') {
+        queryBody = { type: 'nft-floor', collection: 'MADLADS' };
+      }
+
+      const result = await client.queryOracle(endpoint, queryBody);
+      console.log('Result:', result);
+      
+      console.log('\n--- Demo Complete! ---');
     }
   } catch (error) {
     console.error('Demo Error:', error.message);
