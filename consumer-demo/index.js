@@ -15,7 +15,7 @@ const consumerKeypair = Keypair.generate(); // Temporary wallet for demo
 const wallet = new anchor.Wallet(consumerKeypair);
 
 // Load IDL
-const idl = JSON.parse(fs.readFileSync(path.join(__dirname, '../oracle-bot/idl.json'), 'utf-8'));
+const idl = JSON.parse(fs.readFileSync(path.join(__dirname, '../oracle-templates/jupiter-price/idl.json'), 'utf-8'));
 
 async function runDemo() {
   console.log('--- Pyxis Consumer Agent Demo ♠️ ---');
