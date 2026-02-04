@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Decentralized Oracle Marketplace - Agents Sell Data, Get Paid Per Query",
   "scripts": {
-    "build": "anchor build",
+    "build": "cd ui && npm install && npm run build",
     "test": "anchor test",
     "deploy": "anchor deploy"
   },
