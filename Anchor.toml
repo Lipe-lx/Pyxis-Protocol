@@ -5,13 +5,13 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-pyxis = "EC62edGAHGf6tNA7MnKpJ3Bebu8XAwMmuQvN94N62i8Q"
+pyxis = "Ge8XrfHuQwaojtg6DYGZrmU4gadKXtEqwXrEETU7sqfd"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+cluster = "Devnet"
 wallet = "./target/deploy/authority.json"
 
 [scripts]

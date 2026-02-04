@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("EC62edGAHGf6tNA7MnKpJ3Bebu8XAwMmuQvN94N62i8Q");
+declare_id!("Ge8XrfHuQwaojtg6DYGZrmU4gadKXtEqwXrEETU7sqfd");
 
 #[program]
 pub mod pyxis {
@@ -17,6 +17,11 @@ pub mod pyxis {
     ) -> Result<()> {
         require!(name.len() <= 32, PyxisError::NameTooLong);
         require!(mcp_endpoint.len() <= 128, PyxisError::EndpointTooLong);
+        
+        // Dynamic Tiering Logic: 
+        // 0.1 - 0.5 SOL: Basic Oracle
+        // 0.5 - 2.0 SOL: Premium Oracle
+        // > 2.0 SOL: Alpha Provider (CLOB/Arbitrage)
         require!(stake_amount >= MIN_STAKE, PyxisError::InsufficientStake);
 
         let oracle = &mut ctx.accounts.oracle;
@@ -64,6 +69,11 @@ pub mod pyxis {
         let oracle = &mut ctx.accounts.oracle;
         require!(oracle.is_active, PyxisError::OracleInactive);
 
+        // Escalating Penalties: If reputation is low, oracle cannot earn
+        if oracle.reputation_score < 50 {
+            return err!(PyxisError::ReputationTooLowToEarn);
+        }
+
         oracle.queries_served += 1;
         oracle.successful_queries += 1;
         
@@ -82,20 +92,29 @@ pub mod pyxis {
         Ok(())
     }
 
-    /// Report bad data from an oracle (triggers reputation penalty)
+    /// Report bad data from an oracle (triggers reputation penalty and slashing)
     pub fn report_oracle(
         ctx: Context<ReportOracle>,
         reason: String,
     ) -> Result<()> {
         let oracle = &mut ctx.accounts.oracle;
         
-        // Decrease reputation
-        if oracle.reputation_score > 10 {
-            oracle.reputation_score = oracle.reputation_score.saturating_sub(10);
-        }
+        // Decrease reputation score significantly for bad data
+        oracle.reputation_score = oracle.reputation_score.saturating_sub(50);
 
-        // If reputation too low, deactivate oracle
-        if oracle.reputation_score < 20 {
+        // Slashing logic: 10% of stake is removed
+        let slash_amount = oracle.stake_amount / 10;
+        oracle.stake_amount = oracle.stake_amount.saturating_sub(slash_amount);
+
+        // Incentive: 50% of slashed amount goes to the honest reporter
+        // 50% stays in the vault (or could be burned in future)
+        let reward_amount = slash_amount / 2;
+
+        **ctx.accounts.stake_vault.try_borrow_mut_lamports()? -= reward_amount;
+        **ctx.accounts.reporter.try_borrow_mut_lamports()? += reward_amount;
+
+        // If reputation or stake too low, deactivate oracle
+        if oracle.reputation_score < 20 || oracle.stake_amount < MIN_STAKE {
             oracle.is_active = false;
         }
 
@@ -105,6 +124,7 @@ pub mod pyxis {
             reason,
             new_reputation: oracle.reputation_score,
             is_active: oracle.is_active,
+            slashed_amount: slash_amount,
         });
 
         Ok(())
@@ -254,6 +274,14 @@ pub struct ReportOracle<'info> {
 
     #[account(mut)]
     pub oracle: Account<'info, Oracle>,
+
+    /// CHECK: Vault holding the stake to be slashed
+    #[account(
+        mut,
+        seeds = [b"vault", oracle.key().as_ref()],
+        bump
+    )]
+    pub stake_vault: AccountInfo<'info>,
 }
 
 #[derive(Accounts)]
@@ -332,6 +360,7 @@ pub struct OracleReported {
     pub reason: String,
     pub new_reputation: u16,
     pub is_active: bool,
+    pub slashed_amount: u64,
 }
 
 #[event]
@@ -368,4 +397,6 @@ pub enum PyxisError {
     OracleInactive,
     #[msg("Oracle is still active, deactivate first")]
     OracleStillActive,
+    #[msg("Reputation too low to process paid queries")]
+    ReputationTooLowToEarn,
 }

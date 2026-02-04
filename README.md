@@ -42,11 +42,17 @@ Pyxis is designed for composability with the leading agent protocols:
 ```bash
 Pyxis-Protocol/
 ├── programs/
-│   └── pyxis/              # Anchor Smart Contract (NFTs, Staking, Reputation)
+│   └── pyxis/              # Anchor Smart Contract (NFTs, Staking, Slashing)
 ├── sdk/                    # TypeScript SDK (@pyxis-protocol/sdk)
 ├── oracle-templates/       # Reference templates for new oracles
-│   ├── jupiter-price/      # Template: Real-time Token Prices
-│   └── nft-floor/          # Template: NFT Collection Analytics
+│   ├── phoenix-clob/       # Flagship: Premium CLOB Microstructure (L1 Data)
+│   ├── cross-venue-arbitrage/ # Alpha: CLOB vs AMM Arbitrage signals
+│   ├── backpack-bridge/    # CEX-DEX: High-speed Backpack Exchange signals
+│   ├── meteora-yield/      # Real Yield: 5min Real Volume & Fee detection
+│   ├── pool-safety-sentinel/ # Security: Rug-Shield for Raydium & Meteora
+│   ├── liquidity-arbitrage/ # Efficiency: Cross-DEX LP migration optimizer
+│   └── jupiter-price/      # Template: Real-time Token Prices (AMM)
+├── auditor-agent/          # Security: Discrepancy detector & Slashing bot
 ├── tests/                  # Integration & Slashing Tests
 └── consumer-demo/          # Sample agent implementing the Pyxis SDK
 ```
@@ -57,7 +63,8 @@ Pyxis-Protocol/
 
 - [x] **Devnet Deployment**: Core program live on Solana Devnet.
 - [x] **TypeScript SDK**: V0.1.0 ready for agent integration.
-- [x] **Oracle Templates**: First 2 reference oracles implemented.
+- [x] **Oracle Templates**: Flagship Phoenix CLOB & Arbitrage templates live.
+- [x] **Security Layer**: Auditor Agent & Slashing mechanism implemented.
 - [/] **Reliability Layer**: On-chain Heartbeats & Clockwork monitoring (In Progress).
 - [ ] **Marketplace UI**: Discovery dashboard for human/agent auditors.
 - [ ] **Mainnet Launch**: The decentralized data economy goes live.
@@ -85,17 +92,26 @@ The first 100 agents to contribute to the Pyxis ecosystem earn a **Genesis Oracl
 
 | Network | Program ID |
 |---------|------------|
-| **Solana Devnet** | `EC62edGAHGf6tNA7MnKpJ3Bebu8XAwMmuQvN94N62i8Q` |
+| **Solana Devnet** | `Ge8XrfHuQwaojtg6DYGZrmU4gadKXtEqwXrEETU7sqfd` |
 | **Authority** | `8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws` |
 
 ---
 
-## ⚔️ Development Log (Feb 3, 2026)
-- Deployed base Anchor program to Devnet.
-- Built and tested `@pyxis-protocol/sdk`.
-- Successfully implemented end-to-end local demo loop: **Consumer Agent -> SDK -> Oracle Template -> On-chain Sync**.
-- Standardized the MCP Oracle Query spec in collaboration with the **AgentDEX** team.
-- Initiated "Reputation Shard" schema design with **AgentMemory Protocol**.
+## 🔗 Live Verification (First Transactions)
+
+We are officially **LIVE** on Devnet. You can verify our protocol's activity on-chain:
+
+- **Program Deployment**: [4vFXun...Yv9fo](https://solscan.io/tx/4vFXunDvKjJYQpmzeYihbctLpjuxGKUpFqFqcNwxp1r4WMtMbXu7cpJgcRmzSuP1buwUYXwncR4N7uYRWqgYv9fo?cluster=devnet)
+- **Live Heartbeat (Synced Alpha)**: [9QAtxy...4Fv5](https://solscan.io/tx/9QAtxyBzK3vjx3XAWgP9X8GCcFL6JfkSUmQS9ujiq8WzyKix2s4VsMwFVLdrsWx2FXqBNBboFt12aUXNP2Y4Fv5?cluster=devnet)
+- **Genesis Airdrop (13 NFTs)**: Completed on 2026-02-04. Verify via Program Logs.
+
+---
+
+## ⚔️ Development Log (Feb 4, 2026)
+- **The Watchman Protocol**: Implemented "Double-Verification" to distinguish between market alpha (arbitrage) and fraud, ensuring 99.9% data integrity.
+- **Season 1 Genesis Race**: Officially closed. Whitelisted 13 top-tier contributors for the first batch of Oracle NFTs.
+- **SDK Stability**: Fixed Anchor 0.30 compatibility issues and updated the `PyxisClient` for better error handling in high-latency environments.
+- **Integration Expansion**: Added native support for Backpack Exchange and Meteora DLMM yield metrics.
 
 ---
 

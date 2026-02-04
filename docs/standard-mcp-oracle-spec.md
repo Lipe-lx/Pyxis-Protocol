@@ -8,12 +8,13 @@ All requests MUST be sent via `POST` to the oracle's registered `mcp_endpoint`.
 ### Request Schema
 ```json
 {
-  "type": "price" | "risk" | "sentiment" | "custom",
+  "type": "price" | "risk" | "sentiment" | "clob_microstructure" | "custom",
   "asset": "string (e.g., SOL/USDC)",
-  "source": "string (optional, e.g., jupiter)",
+  "source": "string (optional, e.g., phoenix)",
   "params": {
     "timestamp_requirement": "number (max age in seconds)",
-    "confidence_threshold": "number (0-1)"
+    "confidence_threshold": "number (0-1)",
+    "depth_levels": "number (for clob_microstructure, default 10)"
   }
 }
 ```
@@ -58,10 +59,13 @@ If a query requires payment and none is provided, the oracle returns `402 Paymen
 The consumer agent includes the transaction signature in subsequent requests:
 - `x-402-payment`: `<solana_transaction_signature>`
 
-## 4. On-chain Verification Loop
+## 4. On-chain Verification Loop & "The Watchman"
 1.  **Consumer** queries Oracle.
 2.  **Oracle** serves data + signature.
-3.  **Oracle** calls `record_query` on the Pyxis Smart Contract with the `query_id`.
+3.  **The Watchman (Auditor Agent)**: Periodically samples queries and performs **Double-Verification**.
+    - If a discrepancy is found, the data is compared against L1 Historical State.
+    - If proven fraudulent, the Oracle's stake is **Slashed**.
+    - If proven to be valid "Market Alpha" (e.g., faster arbitrage signal), the Oracle receives a **Reputation Bonus**.
 4.  **Contract** updates the oracle's **Reputation Score** based on successful on-chain sync.
 
 ---

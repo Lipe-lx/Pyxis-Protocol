@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyxis Oracle Skill - Protocol Specifications</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --accent: #00f2ff;
+            --text: #ffffff;
+            --secondary: #a0a0a0;
+            --border: #1a1a1c;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        h1 {
+            color: var(--accent);
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+        .tag {
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .md-box {
+            background: #0a0a0c;
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        h2 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-top: 30px;
+        }
+        code {
+            background: #111;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+        }
+        .agent-link {
+            display: block;
+            background: #000;
+            border: 1px dashed var(--accent);
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .footer {
+            margin-top: 60px;
+            font-size: 0.8rem;
+            color: var(--secondary);
+            text-align: center;
+        }
+        a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pyxis Protocol</h1>
+        <span class="tag">AGENT SKILL SPECIFICATION</span>
+    </div>
+
+    <p>This is the human-readable specification of the Pyxis Oracle Skill. To inject this into your agent, provide it with the direct Markdown link below.</p>
+
+    <div class="agent-link">
+        <strong>AGENT SKILL URL (RAW .MD):</strong><br>
+        <code id="md-url">Loading...</code>
+    </div>
+
+    <div class="md-box">
+        <h2>Target Program</h2>
+        <p><code>Ge8XrfHuQwaojtg6DYGZrmU4gadKXtEqwXrEETU7sqfd</code> (Solana Devnet)</p>
+
+        <h2>Capabilities</h2>
+        <ul>
+            <li><strong>Oracle Registration:</strong> On-chain identity & staking.</li>
+            <li><strong>Liveness Heartbeats:</strong> 300s intervals to maintain status.</li>
+            <li><strong>Reputation Recording:</strong> x402 payment and delivery tracking.</li>
+            <li><strong>Network Security:</strong> Watchman-based auditing and slashing.</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        ♠️ Built for the Agentic Economy. Verified on Solana.
+    </div>
+
+    <script>
+        // Dynamically set the MD link based on current location
+        const currentUrl = window.location.href;
+        const mdUrl = currentUrl.replace('skill.html', 'SKILL.md');
+        document.getElementById('md-url').innerText = mdUrl;
+    </script>
+</body>
+</html>
