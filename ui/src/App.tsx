@@ -32,7 +32,6 @@ interface OracleData {
 const SKILL_PAGE = '/skill.html';
 const SKILL_MD = '/SKILL.md';
 const REPO_URL = 'https://github.com/Lipe-lx/Pyxis-Protocol';
-const PROGRAM_ID = new PublicKey(idl.address);
 const RPC_ENDPOINT = 'https://api.devnet.solana.com';
 
 // --- Components ---
@@ -97,11 +96,17 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
   useEffect(() => {
     async function fetchOracles() {
       try {
-        const connection = new Connection(RPC_ENDPOINT);
-        const provider = new AnchorProvider(connection, (window as any).solana, {});
+        const connection = new Connection(RPC_ENDPOINT, 'confirmed');
+        // Create a dummy wallet/provider for read-only access
+        const dummyWallet = {
+          publicKey: PublicKey.default,
+          signTransaction: async (tx: any) => tx,
+          signAllTransactions: async (txs: any) => txs,
+        };
+        const provider = new AnchorProvider(connection, dummyWallet as any, { commitment: 'confirmed' });
         const program = new Program(idl as any, provider);
         
-        const accounts = await program.account.oracle.all();
+        const accounts = await (program.account as any).oracle.all();
         setOracles(accounts as any);
       } catch (err) {
         console.error("Failed to fetch oracles:", err);
@@ -301,6 +306,7 @@ export default function App() {
             style={{ width: '100%', height: '100%' }}
             loop
             autoPlay
+            acknowledgeRemotionLicense
           />
         </div>
       )}
