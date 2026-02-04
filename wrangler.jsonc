@@ -1,0 +1,7 @@
+{
+  "name": "pyxis-ui",
+  "compatibility_date": "2026-02-04",
+  "assets": {
+    "directory": "ui/dist"
+  }
+}
