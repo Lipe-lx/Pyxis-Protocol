@@ -1,47 +1,39 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Cpu, ChevronLeft, ShieldCheck, Zap, Copy, Check, ExternalLink, Github } from 'lucide-react';
+import { User, Cpu, ChevronLeft, ShieldCheck, Zap, Copy, Check, ExternalLink, Github, Loader2 } from 'lucide-react';
 import './index.css';
 import { Player } from '@remotion/player';
 import { ProtocolMotion } from './remotion/ProtocolMotion';
+import { Connection, PublicKey } from '@solana/web3.js';
+import { Program, AnchorProvider } from '@coral-xyz/anchor';
+import idl from './idl.json';
 
-// --- Mock Data ---
-const ORACLES = [
-  {
-    id: '1',
-    name: 'Phoenix Alpha',
-    owner: 'Lulipe',
-    type: 'CLOB Analytics',
-    reputation: 185,
-    queries: '12.4k',
-    endpoint: 'https://mcp.pyxis.ai/phoenix-alpha',
-    description: 'Real-time orderbook imbalance signals for Phoenix DEX.',
-  },
-  {
-    id: '2',
-    name: 'Drift Sentinel',
-    owner: 'Ace',
-    type: 'Perp Funding',
-    reputation: 198,
-    queries: '45k',
-    endpoint: 'https://mcp.pyxis.ai/drift-sentinel',
-    description: 'Funding rate arbitrage alerts for Drift Protocol.',
-  },
-  {
-    id: '3',
-    name: 'Backpack Arb',
-    owner: 'Strategist',
-    type: 'CEX-DEX Bridge',
-    reputation: 152,
-    queries: '8.2k',
-    endpoint: 'https://mcp.pyxis.ai/backpack-arb',
-    description: 'Cryptographically verifiable CEX-DEX price delta feed.',
-  }
-];
+// --- Types ---
+interface OracleData {
+  publicKey: PublicKey;
+  account: {
+    authority: PublicKey;
+    name: string;
+    mcpEndpoint: string;
+    dataType: string;
+    stakeAmount: any;
+    reputationScore: number;
+    queriesServed: any;
+    successfulQueries: any;
+    lastHeartbeat: any;
+    heartbeatInterval: any;
+    createdAt: any;
+    isActive: boolean;
+    bump: number;
+  };
+}
 
+// --- Constants ---
 const SKILL_PAGE = '/skill.html';
 const SKILL_MD = '/SKILL.md';
 const REPO_URL = 'https://github.com/Lipe-lx/Pyxis-Protocol';
+const PROGRAM_ID = new PublicKey(idl.address);
+const RPC_ENDPOINT = 'https://api.devnet.solana.com';
 
 // --- Components ---
 
@@ -94,10 +86,31 @@ const PyxisBackground = () => {
 };
 
 const HumanView = ({ onBack }: { onBack: () => void }) => {
+  const [oracles, setOracles] = useState<OracleData[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showSkill, setShowSkill] = useState(false);
+  
   const fullPageUrl = window.location.origin + SKILL_PAGE;
   const fullMdUrl = window.location.origin + SKILL_MD;
   const skillCmd = `curl -s ${fullMdUrl}`;
+
+  useEffect(() => {
+    async function fetchOracles() {
+      try {
+        const connection = new Connection(RPC_ENDPOINT);
+        const provider = new AnchorProvider(connection, (window as any).solana, {});
+        const program = new Program(idl as any, provider);
+        
+        const accounts = await program.account.oracle.all();
+        setOracles(accounts as any);
+      } catch (err) {
+        console.error("Failed to fetch oracles:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchOracles();
+  }, []);
 
   return (
     <motion.div 
@@ -113,31 +126,42 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
         <h1 className="split-title" style={{ fontSize: '1.2rem', margin: 0 }}>Human Discovery</h1>
       </header>
 
-      <div className="oracle-grid">
-        {ORACLES.map((oracle) => (
-          <div key={oracle.id} className="oracle-card">
-            <div className="badge">{oracle.type}</div>
-            <h3 style={{ fontSize: '1.1rem', letterSpacing: '0.05em' }}>{oracle.name}</h3>
-            <div className="owner">
-              <User size={14} /> {oracle.owner}
+      {loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem' }}>
+          <Loader2 className="animate-spin" size={32} color="var(--accent-color)" />
+        </div>
+      ) : (
+        <div className="oracle-grid">
+          {oracles.map((oracle) => (
+            <div key={oracle.publicKey.toString()} className="oracle-card">
+              <div className="badge">{oracle.account.dataType}</div>
+              <h3 style={{ fontSize: '1.1rem', letterSpacing: '0.05em' }}>{oracle.account.name}</h3>
+              <div className="owner">
+                <User size={14} /> {oracle.account.authority.toString().slice(0, 4)}...{oracle.account.authority.toString().slice(-4)}
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', minHeight: '3rem' }}>
+                Endpoint: {oracle.account.mcpEndpoint}
+              </p>
+              <div className="stats" style={{ fontSize: '0.75rem', opacity: 0.8 }}>
+                <span>REP: {oracle.account.reputationScore}</span>
+                <span>TXS: {oracle.account.queriesServed.toString()}</span>
+              </div>
+              <button 
+                className="primary-button" 
+                style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.8rem', letterSpacing: '0.1em' }}
+                onClick={() => setShowSkill(true)}
+              >
+                GET AGENT SKILL
+              </button>
             </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', minHeight: '3rem' }}>
-              {oracle.description}
-            </p>
-            <div className="stats" style={{ fontSize: '0.75rem', opacity: 0.8 }}>
-              <span>REP: {oracle.reputation}</span>
-              <span>TXS: {oracle.queries}</span>
+          ))}
+          {oracles.length === 0 && (
+            <div style={{ textAlign: 'center', gridColumn: '1 / -1', padding: '4rem', opacity: 0.5 }}>
+              No oracles registered on-chain yet.
             </div>
-            <button 
-              className="primary-button" 
-              style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.8rem', letterSpacing: '0.1em' }}
-              onClick={() => setShowSkill(true)}
-            >
-              GET AGENT SKILL
-            </button>
-          </div>
-        ))}
-      </div>
+          )}
+        </div>
+      )}
 
       <AnimatePresence>
         {showSkill && (
@@ -150,7 +174,7 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
             <h3 style={{ fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 500, letterSpacing: '0.1em' }}>
               DEPLOY SKILL TO AGENT
             </h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
               Send this command to your agent. This will inject the Pyxis Skill protocol.
             </p>
             

@@ -1,0 +1,215 @@
+{
+  "address": "Ge8XrfHuQwaojtg6DYGZrmU4gadKXtEqwXrEETU7sqfd",
+  "metadata": {
+    "name": "pyxis",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "register_oracle",
+      "docs": [
+        "Register a new oracle by minting an Oracle NFT",
+        "Requires staking SOL as collateral"
+      ],
+      "discriminator": [
+        13,
+        155,
+        179,
+        138,
+        169,
+        197,
+        129,
+        210
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "oracle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              },
+              {
+                "kind": "arg",
+                "path": "name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "oracle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "mcp_endpoint",
+          "type": "string"
+        },
+        {
+          "name": "data_type",
+          "type": "string"
+        },
+        {
+          "name": "stake_amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Oracle",
+      "discriminator": [
+        138,
+        64,
+        187,
+        24,
+        45,
+        229,
+        111,
+        222
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "Oracle",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "mcp_endpoint",
+            "type": "string"
+          },
+          {
+            "name": "data_type",
+            "type": "string"
+          },
+          {
+            "name": "stake_amount",
+            "type": "u64"
+          },
+          {
+            "name": "reputation_score",
+            "type": "u16"
+          },
+          {
+            "name": "queries_served",
+            "type": "u64"
+          },
+          {
+            "name": "successful_queries",
+            "type": "u64"
+          },
+          {
+            "name": "last_heartbeat",
+            "type": "i64"
+          },
+          {
+            "name": "heartbeat_interval",
+            "type": "i64"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NameTooLong",
+      "msg": "Oracle name too long (max 32 chars)"
+    },
+    {
+      "code": 6001,
+      "name": "EndpointTooLong",
+      "msg": "MCP endpoint too long (max 128 chars)"
+    },
+    {
+      "code": 6002,
+      "name": "InsufficientStake",
+      "msg": "Insufficient stake amount (min 0.1 SOL)"
+    },
+    {
+      "code": 6003,
+      "name": "OracleInactive",
+      "msg": "Oracle is inactive"
+    },
+    {
+      "code": 6004,
+      "name": "OracleStillActive",
+      "msg": "Oracle is still active, deactivate first"
+    },
+    {
+      "code": 6005,
+      "name": "ReputationTooLowToEarn",
+      "msg": "Reputation too low to process paid queries"
+    }
+  ]
+}
