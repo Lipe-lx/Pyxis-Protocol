@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Cpu, ChevronLeft, ShieldCheck, Zap, Copy, Check, ExternalLink } from 'lucide-react';
+import { User, Cpu, ChevronLeft, ShieldCheck, Zap, Copy, Check, ExternalLink, Github } from 'lucide-react';
 import './index.css';
 import { Player } from '@remotion/player';
 import { ProtocolMotion } from './remotion/ProtocolMotion';
@@ -41,6 +41,8 @@ const ORACLES = [
 
 const SKILL_PAGE = '/skill.html';
 const SKILL_MD = '/SKILL.md';
+
+const REPO_URL = 'https://github.com/Lipe-lx/Pyxis-Protocol';
 
 // --- Components ---
 
@@ -313,6 +315,13 @@ export default function App() {
         {view === 'human' && <HumanView key="human" onBack={() => setView('landing')} />}
         {view === 'agent' && <AgentView key="agent" onBack={() => setView('landing')} />}
       </AnimatePresence>
+
+      <div className="footer-links">
+        <a href={REPO_URL} target="_blank" rel="noreferrer" className="footer-link">
+          <Github size={12} /> GITHUB
+        </a>
+        <span style={{ cursor: 'default' }}>OPEN SOURCE PROTOCOL</span>
+      </div>
     </div>
   );
 }
