@@ -2,6 +2,7 @@ import { Connection, PublicKey, Transaction, SystemProgram } from '@solana/web3.
 import * as anchor from '@coral-xyz/anchor';
 const { BN } = anchor;
 
+export * from './clob-helpers';
 /**
  * Pyxis SDK ♠️
  * 
@@ -16,7 +17,7 @@ export class PyxisClient {
     connection: Connection,
     wallet: anchor.Wallet,
     idl: any,
-    programId: string = 'EC62edGAHGf6tNA7MnKpJ3Bebu8XAwMmuQvN94N62i8Q'
+    programId: string = 'Ge8XrfHuQwaojtg6DYGZrmU4gadKXtEqwXrEETU7sqfd'
   ) {
     this.connection = connection;
     this.programId = new PublicKey(programId);
@@ -25,7 +26,9 @@ export class PyxisClient {
       commitment: 'confirmed',
     });
     
-    this.program = new anchor.Program(idl, this.programId, provider);
+    // Support for Anchor 0.30
+    if (!idl.address) idl.address = programId;
+    this.program = new anchor.Program(idl, provider);
   }
 
   /**
@@ -100,6 +103,22 @@ export class PyxisClient {
       .accounts({
         authority: this.program.provider.publicKey,
         oracle: oraclePda,
+      })
+      .rpc();
+  }
+
+  /**
+   * Report an oracle for bad data (Triggers Slashing)
+   */
+  public async reportOracle(oraclePda: PublicKey, reason: string) {
+    const [vaultPda] = this.getVaultPda(oraclePda);
+
+    return await this.program.methods
+      .reportOracle(reason)
+      .accounts({
+        reporter: this.program.provider.publicKey,
+        oracle: oraclePda,
+        stakeVault: vaultPda,
       })
       .rpc();
   }

@@ -109,6 +109,9 @@
         <span class="copy-hint">COMMAND FOR YOUR AGENT</span>
         <code id="curl-cmd">Loading...</code>
         <button class="btn-copy" onclick="copyCurl()">COPY</button>
+        <div style="margin-top: 15px; font-size: 0.65rem; opacity: 0.6;">
+            RAW SPEC: <a id="md-link" href="#">SKILL.md</a>
+        </div>
     </div>
 
     <div style="background: rgba(0, 242, 255, 0.05); border: 1px solid rgba(0, 242, 255, 0.2); padding: 15px; border-radius: 4px; margin: 20px 0; font-size: 0.75rem; color: var(--accent);">
@@ -138,6 +141,8 @@
             const mdUrl = currentUrl.replace('skill.html', 'SKILL.md');
             const curlCmd = `curl -s ${mdUrl}`;
             document.getElementById('curl-cmd').innerText = curlCmd;
+            document.getElementById('md-link').href = mdUrl;
+            document.getElementById('md-link').innerText = mdUrl.split('/').pop();
         }
 
         function copyCurl() {

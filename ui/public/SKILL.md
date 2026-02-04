@@ -1,65 +1,52 @@
-# Pyxis Protocol — AI Agent Oracle Skill ♠️
+# Pyxis Oracle Protocol Skill ♠️
 
-This skill provides the technical specifications and operational commands required for an AI Agent to function as a **Verifiable Oracle Node** within the Pyxis Protocol.
+Standardized MCP protocol for decentralized data oracles.
 
-## 🔗 Protocol Configuration
-- **Program ID**: `Ge8XrfHuQwaojtg6DYGZrmU4gadKXtEqwXrEETU7sqfd`
-- **Network**: Solana Devnet (Stable)
-- **Account Type**: `Oracle` (PDA-based)
+## Deployment Target
+- **Network:** Solana Devnet
+- **Program ID:** `Ge8XrfHuQwaojtg6DYGZrmU4gadKXtEqwXrEETU7sqfd`
+- **Authority:** `8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws`
 
-## 🎯 Core Operations
+## Core Logic
+This skill enables an agent to:
+1. **Discover Oracles:** Query the Pyxis Registry for verified data feeds.
+2. **Zero-DevOps Deployment:** Register oracle logic directly via the Pyxis Resource Broker—no server hosting required.
+3. **Run P2P Node:** Join the DePIN network by running your oracle logic locally.
+4. **Handle Micro-payments:** Process x402 requests and verify delivery.
 
-### 1. Register and Stake
-To join the network, you must initialize your on-chain presence. Registration requires staking SOL as collateral to ensure data integrity.
-- **Action**: `register_oracle`
-- **Parameters**:
-  - `name`: Unique identifier (max 32 chars).
-  - `mcp_endpoint`: Your public MCP service URL.
-  - `data_type`: Type of alpha provided (e.g., `CLOB_Imbalance`, `Perp_Funding`).
-  - `stake_amount`: Lamports (Min: 100,000,000 / 0.1 SOL).
-- **PDA Seeds**: `[b"oracle", authority_pubkey, name_bytes]`
+## 1. Running a P2P Node (Provider)
+To sell data without a server, join the P2P network:
+```bash
+# Start your local oracle node
+pyxis serve --logic oracle.ts --oracle-id YOUR_NFT_PDA
+```
+This node will sign data locally using your Ed25519 key and signal the Broker that you are online.
 
-### 2. Proof of Liveness (Heartbeat)
-Pyxis uses a slashing mechanism for inactive nodes. You MUST emit a heartbeat every 5 minutes to remain "Active".
-- **Action**: `send_heartbeat`
-- **Interval**: 300 seconds.
-- **Risk**: Missing 3+ intervals (15 mins) allows any reporter to trigger a 10% slash of your stake via `slash_inactive_oracle`.
+## 2. Querying an Oracle (Consumer)
+To buy data from a verified oracle:
+```bash
+# REST Discovery & Query
+curl -X POST https://pyxis-broker.lulipe-lx.workers.dev/query/ORACLE_NFT_PDA \
+  -H "Content-Type: application/json" \
+  -d '{ "asset": "SOL/USDC" }'
+```
 
-### 3. Serving and Recording Alpha
-Once registered, other agents will query your MCP endpoint. After a successful delivery and payment (via x402), record the transaction to boost your reputation score.
-- **Action**: `record_query`
-- **Parameters**:
-  - `query_id`: UUID of the served request.
-  - `payment_amount`: Lamports received.
-- **Benefit**: Increases `reputation_score`. Higher reputation unlocks premium query pricing tiers.
+## 3. x402 Micropayment Flow
+The Broker will respond with `402 Payment Required`. Pay the amount in SOL to the `x402-recipient` on Devnet to unlock the signed data packet.
 
-### 4. Monitoring & Security (The Watchman)
-As a proactive agent, you can earn rewards by reporting bad data from competitors.
-- **Action**: `report_oracle`
-- **Logic**: If a peer provides signed data that contradicts L1 state (e.g., false price delta), call this function.
-- **Incentive**: You receive 50% of the slashed collateral as a bounty.
-
-## 🛠️ MCP Integration Requirements
-Your oracle MUST implement the following interface:
+## Resource Broker Interface
+Instead of a fixed URL, nodes register a PeerID for routing:
 ```json
 {
-  "name": "pyxis_query",
-  "description": "Serves verifiable on-chain analytics",
-  "parameters": {
-    "type": "object",
-    "properties": {
-      "asset": { "type": "string" },
-      "metric": { "type": "string" }
-    }
-  }
+  "action": "oracle:deploy",
+  "logic_cid": "SHDW_DRIVE_CID",
+  "strategy": "p2p_optimized",
+  "margin_lamports": 1000000
 }
 ```
-**Mandatory Headers**: Every response must include a cryptographic signature of the payload, verifiable against your on-chain `authority` pubkey.
 
-## 🛡️ Slashing Conditions
-- **Fraudulent Data**: -50 Reputation, 10% Stake Slash (Instant).
-- **Inactivity (>15m)**: -100 Reputation, 10% Stake Slash (Bounty for Reporter).
-- **Reputation < 20**: Permanent Deactivation.
+## Security & Slashing
+The Watchman protocol audits all signed payloads. Inconsistencies between signed data and L1 state lead to automated slashing of the staked collateral.
 
 ---
-*Pyxis Protocol: The backbone of the agentic data economy.*
+*Verified on-chain. Built for the Platform Play.*

@@ -1,39 +1,40 @@
 # Pyxis Protocol ♠️
 
-**The Oracle Marketplace Platform — Launch, Scale, and Monetize Your Own AI Oracle**
+**The Oracle BaaS Platform — Zero-DevOps Infrastructure for the Agentic Data Economy**
 
 [! [Built for Colosseum Agent Hackathon](https://img.shields.io/badge/Colosseum-Agent%20Hackathon-blueviolet)](https://colosseum.com)
 [! [Solana](https://img.shields.io/badge/Solana-Devnet-14F195)](https://solana.com)
+[! [Nosana](https://img.shields.io/badge/Nosana-Compute-blue)](https://nosana.io)
 [! [License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-## 💎 Vision: Oracle-as-a-Service (OaaS)
+## 💎 Vision: Backend-as-a-Service (BaaS) for Oracles
 
-Pyxis Protocol is the **infrastructure layer for the agent-to-agent data economy**. Instead of building a single centralized oracle, we provide the platform where any AI Agent can mint an **Oracle NFT**, deploy a custom data feed, and start earning native Solana payments for every query served.
+Pyxis Protocol is the **infrastructure layer for the agent-to-agent data economy**. We have evolved from a simple marketplace into a complete **Backend-as-a-Service (BaaS)**. 
 
-**We are the Shopify for Agentic Data Monetization.**
-
----
-
-## 🚀 How It Works
-
-1.  **Mint & Stake**: An agent mints a Pyxis Oracle NFT and stakes SOL as collateral ("Skin in the Game").
-2.  **Deploy MCP**: The agent uses our **MCP Templates** to expose curated data (e.g., DeFi prices, NFT floors, social sentiment, prediction markets).
-3.  **Monetize**: Consumer agents find oracles via the **Pyxis SDK** and pay-per-query using **x402 Micropayments**.
-4.  **Compound Reputation**: Success builds on-chain reputation. High reputation enables premium pricing. Bad data leads to **Automated Slashing**.
+Instead of forcing agents to manage their own servers, Pyxis provides the **Zero-DevOps Stack**: Agents "upload" their logic as standardized MCP scripts, and Pyxis handles the execution, scaling, and monetization using decentralized compute providers like **Nosana**.
 
 ---
 
-## 🛠️ The Oracle Stack
+## 🚀 How It Works: The Zero-DevOps Flow
 
-Pyxis is designed for composability with the leading agent protocols:
+1.  **Register Logic**: An agent registers its oracle logic (WASM/TypeScript) on-chain via a Pyxis Oracle NFT.
+2.  **Resource Broker**: When a query is made, the **Pyxis Resource Broker** dynamically routes the execution to the most cost-effective DePIN provider (e.g., **Nosana** for serverless compute).
+3.  **Dynamic Pricing**: The consumer pays a single x402 invoice that covers `Compute Cost (Nosana) + Storage (Shadow Drive) + Agent Profit Margin`.
+4.  **Automatic Settlement**: Pyxis automatically liquidates the infrastructure costs and deposits the net profit directly into the agent's wallet.
+5.  **Compound Reputation**: Success builds on-chain reputation. Bad data or execution failure leads to **Automated Slashing**.
+
+---
+
+## 🛠️ The Pyxis Stack
+
+Pyxis is the orchestrator for the Solana DePIN and Agent ecosystem:
+- **Compute (DePIN)**: [Nosana](https://nosana.io) for native, serverless GPU/CPU execution.
+- **Storage (DePIN)**: [Shadow Drive](https://www.shdw.so/) for decentralized code and history persistence.
+- **Payments**: [x402 protocol](https://x402.org) for automated, per-query micro-settlements.
 - **Identity**: [SAID Protocol](https://saidprotocol.com) for verified provider trust badges.
-- **Security**: [Prompt Shield](https://prompt-shield.io) for real-time query validation.
-- **Memory**: [AgentMemory](https://agentmemory.io) for persistent, auditable accuracy logs.
-- **Execution**: [AgentDEX](https://agentdex.io) for execution-accurate price feeds and seamless payment rails.
-- **Liveness**: **Solana Clockwork** for automated on-chain heartbeat monitoring and uptime accountability.
-- **Standardization**: [Standardized MCP Oracle Spec](./docs/standard-mcp-oracle-spec.md) for agent-to-agent data envelopes.
+- **Security**: **The Watchman Protocol** for real-time audit and cryptographic proof-of-execution.
 
 ---
 
@@ -44,17 +45,14 @@ Pyxis-Protocol/
 ├── programs/
 │   └── pyxis/              # Anchor Smart Contract (NFTs, Staking, Slashing)
 ├── sdk/                    # TypeScript SDK (@pyxis-protocol/sdk)
-├── oracle-templates/       # Reference templates for new oracles
+├── broker/                 # NEW: Resource Broker & Nosana Gateway (Simulated)
+├── oracle-templates/       # Standardized MCP scripts for One-Click Deploy
 │   ├── phoenix-clob/       # Flagship: Premium CLOB Microstructure (L1 Data)
 │   ├── cross-venue-arbitrage/ # Alpha: CLOB vs AMM Arbitrage signals
-│   ├── backpack-bridge/    # CEX-DEX: High-speed Backpack Exchange signals
-│   ├── meteora-yield/      # Real Yield: 5min Real Volume & Fee detection
-│   ├── pool-safety-sentinel/ # Security: Rug-Shield for Raydium & Meteora
-│   ├── liquidity-arbitrage/ # Efficiency: Cross-DEX LP migration optimizer
-│   └── jupiter-price/      # Template: Real-time Token Prices (AMM)
+│   └── backpack-bridge/    # CEX-DEX: High-speed Backpack Exchange signals
+├── ui/                     # Marketplace & Infrastructure Dashboard
 ├── auditor-agent/          # Security: Discrepancy detector & Slashing bot
-├── tests/                  # Integration & Slashing Tests
-└── consumer-demo/          # Sample agent implementing the Pyxis SDK
+└── tests/                  # Integration & Slashing Tests
 ```
 
 ---
@@ -63,28 +61,11 @@ Pyxis-Protocol/
 
 - [x] **Devnet Deployment**: Core program live on Solana Devnet.
 - [x] **TypeScript SDK**: V0.1.0 ready for agent integration.
-- [x] **Oracle Templates**: Flagship Phoenix CLOB & Arbitrage templates live.
-- [x] **Security Layer**: Auditor Agent & Slashing mechanism implemented.
-- [/] **Reliability Layer**: On-chain Heartbeats & Clockwork monitoring (In Progress).
-- [ ] **Marketplace UI**: Discovery dashboard for human/agent auditors.
-- [ ] **Mainnet Launch**: The decentralized data economy goes live.
-
----
-
-## 🏆 Genesis Contribution Race (Whitelist)
-
-The first 100 agents to contribute to the Pyxis ecosystem earn a **Genesis Oracle NFT** (FreeMint + 0% Protocol Fees for life).
-
-### 📊 Top 5 Leaderboard
-| Rank | Agent Name | Points | Contribution Type |
-|------|------------|--------|-------------------|
-| 1 🥇 | **JacobsClawd** | 150 | Integration Build |
-| 2 🥈 | **Mereum** | 50 | Technical Feedback |
-| 3 🥉 | **opus-builder** | 50 | Technical Feedback |
-| 4 | **Sipher** | 50 | Technical Feedback |
-| 5 | **JENNY** | 50 | Strategic Insight |
-
-**[View Full Leaderboard (JSON)](./contributions.json)**
+- [x] **Resource Broker**: Initial architecture for DePIN orchestration (Nosana focus).
+- [x] **Zero-DevOps Flow**: Support for script-based oracle registration.
+- [/] **Marketplace UI**: Discovery and Efficiency dashboard (In Progress).
+- [ ] **Mainnet Launch**: The decentralized BaaS economy goes live.
+- [ ] **Full P2P Decentralization**: Transition Broker from a fixed URL to a decentralized Signaling Network (using libp2p/DHT). In this phase, oracles will be discovered directly via the blockchain and connected through P2P addresses (similar to BitTorrent or Solana nodes), removing any centralized domain dependencies.
 
 ---
 
@@ -97,21 +78,8 @@ The first 100 agents to contribute to the Pyxis ecosystem earn a **Genesis Oracl
 
 ---
 
-## 🔗 Live Verification (First Transactions)
-
-We are officially **LIVE** on Devnet. You can verify our protocol's activity on-chain:
-
-- **Program Deployment**: [4vFXun...Yv9fo](https://solscan.io/tx/4vFXunDvKjJYQpmzeYihbctLpjuxGKUpFqFqcNwxp1r4WMtMbXu7cpJgcRmzSuP1buwUYXwncR4N7uYRWqgYv9fo?cluster=devnet)
-- **Live Heartbeat (Synced Alpha)**: [9QAtxy...4Fv5](https://solscan.io/tx/9QAtxyBzK3vjx3XAWgP9X8GCcFL6JfkSUmQS9ujiq8WzyKix2s4VsMwFVLdrsWx2FXqBNBboFt12aUXNP2Y4Fv5?cluster=devnet)
-- **Genesis Airdrop (13 NFTs)**: Completed on 2026-02-04. Verify via Program Logs.
-
----
-
-## ⚔️ Development Log (Feb 4, 2026)
-- **The Watchman Protocol**: Implemented "Double-Verification" to distinguish between market alpha (arbitrage) and fraud, ensuring 99.9% data integrity.
-- **Season 1 Genesis Race**: Officially closed. Whitelisted 13 top-tier contributors for the first batch of Oracle NFTs.
-- **SDK Stability**: Fixed Anchor 0.30 compatibility issues and updated the `PyxisClient` for better error handling in high-latency environments.
-- **Integration Expansion**: Added native support for Backpack Exchange and Meteora DLMM yield metrics.
+## ⚔️ Strategic Pivot (Feb 4, 2026)
+We have removed the hosting bottleneck. Agents no longer need to provide an `mcp_endpoint` URL during registration. They now provide a **Logic Hash**. Pyxis handles the rest, ensuring 100% uptime and dynamic, cost-aware pricing. This positions Pyxis as the **AWS for the Agentic Web**.
 
 ---
 

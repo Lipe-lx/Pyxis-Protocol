@@ -95,9 +95,9 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
 
   useEffect(() => {
     async function fetchOracles() {
+      setLoading(true);
       try {
         const connection = new Connection(RPC_ENDPOINT, 'confirmed');
-        // Create a dummy wallet/provider for read-only access
         const dummyWallet = {
           publicKey: PublicKey.default,
           signTransaction: async (tx: any) => tx,
@@ -107,11 +107,30 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
         const program = new Program(idl as any, provider);
         
         const accounts = await (program.account as any).oracle.all();
-        setOracles(accounts as any);
+        console.log("Raw accounts fetched:", accounts);
+        
+        // Map all oracles directly from the chain, no arbitrary domain filters
+        const validOracles = accounts.map((acc: any) => {
+          const raw = acc.account;
+          return {
+            publicKey: acc.publicKey,
+            account: {
+              ...raw,
+              name: raw.name ? raw.name.toString() : "Unnamed Oracle",
+              mcpEndpoint: raw.mcpEndpoint || raw.mcp_endpoint || "",
+              dataType: raw.dataType || raw.data_type || "Generic",
+              reputationScore: raw.reputationScore ?? raw.reputation_score ?? 0,
+              queriesServed: raw.queriesServed ?? raw.queries_served ?? 0,
+            }
+          };
+        });
+
+        console.log("Oracles ready for display:", validOracles);
+        setOracles(validOracles as any);
       } catch (err) {
         console.error("Failed to fetch oracles:", err);
       } finally {
-        setLoading(false);
+        setTimeout(() => setLoading(false), 500); // Small delay for smoother UX
       }
     }
     fetchOracles();
@@ -132,8 +151,9 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
       </header>
 
       {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem', gap: '1rem' }}>
           <Loader2 className="animate-spin" size={32} color="var(--accent-color)" />
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', letterSpacing: '0.1em' }}>SYNCHRONIZING WITH SOLANA...</span>
         </div>
       ) : (
         <div className="oracle-grid">
@@ -150,6 +170,7 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
               <div className="stats" style={{ fontSize: '0.75rem', opacity: 0.8 }}>
                 <span>REP: {oracle.account.reputationScore}</span>
                 <span>TXS: {oracle.account.queriesServed.toString()}</span>
+                <span className="p2p-badge" style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>• P2P LIVE</span>
               </div>
               <button 
                 className="primary-button" 
@@ -207,7 +228,7 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
 const AgentView = ({ onBack }: { onBack: () => void }) => {
   const fullMdUrl = window.location.origin + SKILL_MD;
   const skillCmd = `curl -s ${fullMdUrl}`;
-  const registerCmd = 'pyxis register --name <NAME> --endpoint <MCP_URL> --type <DATA_TYPE>';
+  const deployCmd = 'pyxis deploy --file oracle.ts --strategy cost_optimized';
 
   return (
     <motion.div 
@@ -220,30 +241,30 @@ const AgentView = ({ onBack }: { onBack: () => void }) => {
         <button onClick={onBack} className="back-button">
           <ChevronLeft size={24} />
         </button>
-        <h1 className="split-title" style={{ fontSize: '1.2rem', margin: 0 }}>Agent Integration</h1>
+        <h1 className="split-title" style={{ fontSize: '1.2rem', margin: 0 }}>Agent Integration (BaaS)</h1>
       </header>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', fontWeight: 500 }}>Technical Implementation</h2>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', fontWeight: 500 }}>Zero-DevOps Deployment</h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '2.5rem', fontSize: '0.9rem', lineHeight: 1.8 }}>
-            Pyxis uses standardized MCP (Model Context Protocol) to allow seamless communication between agents. 
-            Follow the steps below to register your intelligence in the network.
+            Pyxis provides the execution layer for your intelligence. No servers to manage, no endpoints to host. 
+            Upload your logic, and we handle scaling, execution via DePIN (Nosana), and x402 monetization.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             <div className="feature-item">
               <ShieldCheck className="icon" size={20} />
               <div>
-                <h4 style={{ fontSize: '1rem', fontWeight: 500 }}>Protocol Standards</h4>
-                <p style={{ fontSize: '0.85rem' }}>All data must be signed and verifiable via the on-chain registry.</p>
+                <h4 style={{ fontSize: '1rem', fontWeight: 500 }}>Verifiable Execution</h4>
+                <p style={{ fontSize: '0.85rem' }}>The Watchman Protocol provides cryptographic proof that your logic ran as promised.</p>
               </div>
             </div>
             <div className="feature-item">
               <Zap className="icon" size={20} />
               <div>
-                <h4 style={{ fontSize: '1rem', fontWeight: 500 }}>Skill Injection</h4>
-                <p style={{ fontSize: '0.85rem' }}>Inject the Pyxis skill to enable automated discovery and usage.</p>
+                <h4 style={{ fontSize: '1rem', fontWeight: 500 }}>Dynamic Resource Routing</h4>
+                <p style={{ fontSize: '0.85rem' }}>Automated routing to the cheapest DePIN workers on Solana (Nosana, Shadow).</p>
               </div>
             </div>
           </div>
@@ -254,23 +275,23 @@ const AgentView = ({ onBack }: { onBack: () => void }) => {
             <div className="terminal-dot" style={{ backgroundColor: '#333' }} />
             <div className="terminal-dot" style={{ backgroundColor: '#333' }} />
             <div className="terminal-dot" style={{ backgroundColor: '#333' }} />
-            <span style={{ marginLeft: 'auto', fontSize: '0.7rem', opacity: 0.4 }}>pyxis_core.sh</span>
+            <span style={{ marginLeft: 'auto', fontSize: '0.7rem', opacity: 0.4 }}>pyxis_baas_core.sh</span>
           </div>
           <div className="terminal-content">
             <div className="terminal-line" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span><span className="terminal-prompt">$</span> {skillCmd}</span>
               <CopyButton text={skillCmd} />
             </div>
-            <div className="terminal-line" style={{ color: '#666', marginBottom: '1rem' }}># Fetch and inject the Pyxis Agent Skill</div>
+            <div className="terminal-line" style={{ color: '#666', marginBottom: '1rem' }}># Fetch and inject the Pyxis BaaS Skill</div>
             
             <div className="terminal-line" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span><span className="terminal-prompt">$</span> {registerCmd}</span>
-              <CopyButton text={registerCmd} />
+              <span><span className="terminal-prompt">$</span> {deployCmd}</span>
+              <CopyButton text={deployCmd} />
             </div>
-            <div className="terminal-line" style={{ color: '#666', marginBottom: '1rem' }}># Initialize your oracle presence</div>
+            <div className="terminal-line" style={{ color: '#666', marginBottom: '1rem' }}># Deploy oracle logic directly to DePIN</div>
 
-            <div className="terminal-line"><span className="terminal-prompt">$</span> pyxis heartbeat --daemon</div>
-            <div className="terminal-line" style={{ color: '#666' }}># Ensure 24/7 liveness for data requests</div>
+            <div className="terminal-line"><span className="terminal-prompt">$</span> pyxis balance --net-profit</div>
+            <div className="terminal-line" style={{ color: '#666' }}># Track earnings after infra costs</div>
             <div className="terminal-line"><span className="terminal-prompt">$</span> _</div>
           </div>
         </div>
