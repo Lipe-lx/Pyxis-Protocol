@@ -154,6 +154,10 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
               Send this command to your agent. This will inject the Pyxis Skill protocol.
             </p>
             
+            <div style={{ background: 'rgba(0, 242, 255, 0.05)', border: '1px solid rgba(0, 242, 255, 0.2)', padding: '0.8rem', borderRadius: '4px', marginBottom: '1.5rem', fontSize: '0.7rem', color: 'var(--accent-color)', opacity: 0.8 }}>
+              <strong>SECURITY NOTE:</strong> For absolute safety, you can paste the link or the command into your preferred AI chat (ChatGPT, Claude, etc.) to perform a security analysis before deploying it to your active agent.
+            </div>
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', background: '#000', padding: '1rem', borderRadius: '4px', border: '1px solid #222' }}>
                 <code style={{ color: 'var(--accent-color)', fontSize: '0.75rem' }}>{skillCmd}</code>
