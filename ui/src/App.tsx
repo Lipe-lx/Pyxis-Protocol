@@ -41,7 +41,6 @@ const ORACLES = [
 
 const SKILL_PAGE = '/skill.html';
 const SKILL_MD = '/SKILL.md';
-
 const REPO_URL = 'https://github.com/Lipe-lx/Pyxis-Protocol';
 
 // --- Components ---
@@ -98,6 +97,7 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
   const [showSkill, setShowSkill] = useState(false);
   const fullPageUrl = window.location.origin + SKILL_PAGE;
   const fullMdUrl = window.location.origin + SKILL_MD;
+  const skillCmd = `curl -s ${fullMdUrl}`;
 
   return (
     <motion.div 
@@ -148,24 +148,21 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
             style={{ maxWidth: '600px', margin: '4rem auto 0', textAlign: 'center', backgroundColor: 'rgba(0, 242, 255, 0.02)' }}
           >
             <h3 style={{ fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 500, letterSpacing: '0.1em' }}>
-              VERIFY & DEPLOY SKILL
+              DEPLOY SKILL TO AGENT
             </h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-              1. Open the documentation link to verify the protocol specs.<br/>
-              2. Provide the direct <strong>.md</strong> link to your agent.
+              Send this command to your agent. This will inject the Pyxis Skill protocol.
             </p>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', background: '#000', padding: '0.8rem', borderRadius: '4px', border: '1px solid #222' }}>
-                <a href={fullPageUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--accent-color)', fontSize: '0.75rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  VIEW DOCS <ExternalLink size={12} />
-                </a>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', background: '#000', padding: '1rem', borderRadius: '4px', border: '1px solid #222' }}>
+                <code style={{ color: 'var(--accent-color)', fontSize: '0.75rem' }}>{skillCmd}</code>
+                <CopyButton text={skillCmd} />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', background: '#000', padding: '0.8rem', borderRadius: '4px', border: '1px solid #222' }}>
-                <code style={{ color: 'var(--text-secondary)', fontSize: '0.7rem' }}>{fullMdUrl}</code>
-                <CopyButton text={fullMdUrl} />
-              </div>
+              <a href={fullPageUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)', fontSize: '0.65rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', opacity: 0.5 }}>
+                VIEW FULL SPECIFICATION <ExternalLink size={10} />
+              </a>
             </div>
           </motion.div>
         )}

@@ -64,10 +64,18 @@
             display: block;
             background: #000;
             border: 1px dashed var(--accent);
-            padding: 15px;
-            margin: 20px 0;
+            padding: 20px;
+            margin: 25px 0;
             text-align: center;
             border-radius: 4px;
+        }
+        .copy-hint {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
         .footer {
             margin-top: 60px;
@@ -76,6 +84,17 @@
             text-align: center;
         }
         a { color: var(--accent); text-decoration: none; }
+        .btn-copy {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.6rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -84,11 +103,12 @@
         <span class="tag">AGENT SKILL SPECIFICATION</span>
     </div>
 
-    <p>This is the human-readable specification of the Pyxis Oracle Skill. To inject this into your agent, provide it with the direct Markdown link below.</p>
+    <p>To enable your AI agent to interact with the Pyxis Oracle marketplace, send the following command to its chat interface.</p>
 
     <div class="agent-link">
-        <strong>AGENT SKILL URL (RAW .MD):</strong><br>
-        <code id="md-url">Loading...</code>
+        <span class="copy-hint">COMMAND FOR YOUR AGENT</span>
+        <code id="curl-cmd">Loading...</code>
+        <button class="btn-copy" onclick="copyCurl()">COPY</button>
     </div>
 
     <div class="md-box">
@@ -109,10 +129,20 @@
     </div>
 
     <script>
-        // Dynamically set the MD link based on current location
-        const currentUrl = window.location.href;
-        const mdUrl = currentUrl.replace('skill.html', 'SKILL.md');
-        document.getElementById('md-url').innerText = mdUrl;
+        function updateUrls() {
+            const currentUrl = window.location.href;
+            const mdUrl = currentUrl.replace('skill.html', 'SKILL.md');
+            const curlCmd = `curl -s ${mdUrl}`;
+            document.getElementById('curl-cmd').innerText = curlCmd;
+        }
+
+        function copyCurl() {
+            const text = document.getElementById('curl-cmd').innerText;
+            navigator.clipboard.writeText(text);
+            alert('Command copied!');
+        }
+
+        updateUrls();
     </script>
 </body>
 </html>
