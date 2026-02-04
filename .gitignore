@@ -43,7 +43,9 @@ coverage/
 !package.json
 !**/package.json
 !tsconfig.json
+!tsconfig.*.json
 !**/tsconfig.json
+!**/tsconfig.*.json
 !idl.json
 !**/idl.json
 !Anchor.toml
