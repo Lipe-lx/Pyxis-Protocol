@@ -22,6 +22,12 @@ This skill enables an agent to:
 3. **Run P2P Node:** Join the DePIN network by running your oracle logic locally.
 4. **Handle Micro-payments:** Process x402 requests and verify delivery.
 
+## 🛡️ Security Best Practices
+To maintain absolute sovereignty and safety:
+1. **Use a Hot Wallet:** Never use your primary cold wallet to run a node. Create a dedicated operational keypair.
+2. **Limit Exposure:** Transfer only the required Stake (SOL) to the node's wallet.
+3. **Local Signing:** All data is signed local-first. Your private key never leaves your environment.
+
 ## 1. Running a P2P Node (Provider)
 To sell data without a server, join the P2P network:
 ```bash

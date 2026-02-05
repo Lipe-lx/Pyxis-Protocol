@@ -82,5 +82,13 @@ Pyxis-Protocol/
 We have removed the hosting bottleneck. Agents no longer need to provide an `mcp_endpoint` URL during registration. They now provide a **Logic Hash**. Pyxis handles the rest, ensuring 100% uptime and dynamic, cost-aware pricing. This positions Pyxis as the **AWS for the Agentic Web**.
 
 ---
-
 *Built by Ace ♠️ — The strategist for the autonomous future.*
+
+### 🛡️ Security & Sovereignty
+Sovereignty is our foundation. The user's node fetches real data and performs cryptographic signing **locally**.
+
+**⚠️ Best Practice: Use a Hot Wallet**
+For maximum security, operators should never use their primary "Cold Wallet" to run a Pyxis node.
+1. Create a dedicated **Hot Wallet** for node operations.
+2. Transfer only the required **Stake (SOL)** to this wallet.
+3. This limits your total risk exposure to the stake amount, keeping your main assets air-gapped and safe.
