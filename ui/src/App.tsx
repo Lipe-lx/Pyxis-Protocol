@@ -347,26 +347,26 @@ export default function App() {
   useEffect(() => {
     if (view === 'pitch' && pitchAudio) {
       const runPitch = async () => {
-        // Slide 0: 9.75s
-        await new Promise(r => setTimeout(r, 9750));
+        // Slide 0: Intro (Segments 1+2: 4s + 9s)
+        await new Promise(r => setTimeout(r, 13000));
         setPitchStep(1);
-        // Slide 1: 9.75s
-        await new Promise(r => setTimeout(r, 9750));
+        // Slide 1: Problem (Segment 3: 8s)
+        await new Promise(r => setTimeout(r, 8000));
         setPitchStep(2);
-        // Slide 2: 9.75s
-        await new Promise(r => setTimeout(r, 9750));
+        // Slide 2: Solution (Segment 4: 11s)
+        await new Promise(r => setTimeout(r, 11000));
         setPitchStep(3);
-        // Slide 3 (VIDEO): 7.5s
-        await new Promise(r => setTimeout(r, 7500));
+        // Slide 3: Demo Video (Segment 5: 9s)
+        await new Promise(r => setTimeout(r, 9000));
         setPitchStep(4);
-        // Slide 4: 9.75s
-        await new Promise(r => setTimeout(r, 9750));
+        // Slide 4: Security (Segment 6: 9s)
+        await new Promise(r => setTimeout(r, 9000));
         setPitchStep(5);
-        // Slide 5: 9.75s
-        await new Promise(r => setTimeout(r, 9750));
+        // Slide 5: Ecosystem (Segment 7: 7s)
+        await new Promise(r => setTimeout(r, 7000));
         setPitchStep(6);
-        // Slide 6: 9.75s
-        await new Promise(r => setTimeout(r, 9750));
+        // Slide 6: Final (Segment 8: 10s)
+        await new Promise(r => setTimeout(r, 10000));
         
         pitchAudio.pause();
         setView('landing');

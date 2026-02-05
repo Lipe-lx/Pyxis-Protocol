@@ -58,6 +58,9 @@ const steps = [
 export const PitchSequence = ({ currentStep }: { currentStep: number }) => {
   const step = steps[currentStep] || steps[0];
 
+  const durations = [13, 8, 11, 9, 9, 7, 10];
+  const currentDuration = durations[currentStep] || 10;
+
   return (
     <motion.div 
       key={step.id}
@@ -91,7 +94,7 @@ export const PitchSequence = ({ currentStep }: { currentStep: number }) => {
             muted 
             playsInline 
             onLoadedMetadata={(e) => {
-              (e.target as HTMLVideoElement).playbackRate = 2.0;
+              (e.target as HTMLVideoElement).playbackRate = 1.7; // Adjusted to fit 9s audio
             }}
             style={{ width: '100%', display: 'block' }} 
           />
@@ -116,7 +119,7 @@ export const PitchSequence = ({ currentStep }: { currentStep: number }) => {
           key={`bar-${currentStep}`}
           initial={{ width: 0 }}
           animate={{ width: '100%' }}
-          transition={{ duration: currentStep === 3 ? 7.5 : 9.75, ease: "linear" }}
+          transition={{ duration: currentDuration, ease: "linear" }}
           style={{ height: '100%', background: 'var(--accent-color)' }}
         />
       </div>
