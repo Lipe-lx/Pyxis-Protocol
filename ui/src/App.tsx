@@ -8,6 +8,7 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { Program, AnchorProvider } from '@coral-xyz/anchor';
 import idl from './idl.json';
 import { PitchSequence } from './PitchSequence';
+import { PyxisLogo } from './PyxisLogo';
 
 // --- Types ---
 interface OracleData {
@@ -339,7 +340,7 @@ export default function App() {
     if (view === 'pitch') {
       const interval = setInterval(() => {
         setPitchStep((s) => {
-          if (s >= 5) {
+          if (s >= 6) {
             clearInterval(interval);
             setView('landing');
             return 0;
@@ -369,8 +370,8 @@ export default function App() {
       
       <header className="brand-header">
         <a href="/" className="brand-logo" onClick={(e) => { e.preventDefault(); setView('landing'); }}>
-          <div className="brand-logo-icon">
-            <Zap size={18} color="black" fill="black" />
+          <div className="brand-logo-icon" style={{ background: 'transparent' }}>
+            <PyxisLogo size={24} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <span className="brand-name">Pyxis Protocol</span>

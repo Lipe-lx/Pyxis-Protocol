@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { ShieldCheck, Zap, Cpu, Users, Globe, Terminal } from 'lucide-react';
+import { PyxisLogo } from './PyxisLogo';
 
 const steps = [
   {
     id: 'intro',
     title: 'PYXIS PROTOCOL',
     subtitle: 'The Oracle BaaS for the Agentic Web',
-    icon: <Zap size={48} color="var(--accent-color)" />,
+    icon: <PyxisLogo size={120} />,
     description: 'Eliminating the DevOps bottleneck for AI Oracles on Solana.'
   },
   {
@@ -43,6 +44,13 @@ const steps = [
     subtitle: 'The Sovereign Stack',
     icon: <Terminal size={48} color="var(--accent-color)" />,
     description: 'Integrated with SAID, Murkl, AgentMemory, and Sipher.'
+  },
+  {
+    id: 'final',
+    title: 'PYXIS PROTOCOL',
+    subtitle: 'BUILD ON THE PROTOCOL ♠️',
+    icon: <PyxisLogo size={200} />,
+    description: 'The sovereign future of data is live on Solana Devnet.'
   }
 ];
 
