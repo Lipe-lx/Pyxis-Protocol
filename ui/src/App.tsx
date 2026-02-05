@@ -335,11 +335,11 @@ export default function App() {
 
   useEffect(() => {
     if (view === 'landing') {
-      document.body.style.height = '100vh';
-      document.body.style.overflow = 'hidden';
+      document.body.style.height = '200vh';
+      document.body.style.overflowY = 'scroll';
     } else {
       document.body.style.height = 'auto';
-      document.body.style.overflow = 'auto';
+      document.body.style.overflowY = 'auto';
       window.scrollTo(0, 0);
     }
   }, [view]);
@@ -390,6 +390,7 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
             className="split-screen"
+            style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
           >
             <motion.div 
               whileHover={{ y: -10 }}
