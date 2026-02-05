@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { ShieldCheck, Cpu, Globe, Terminal } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldCheck, Cpu, Globe, Terminal, X } from 'lucide-react';
 import { PyxisLogo } from './PyxisLogo';
 
 const steps = [
@@ -55,7 +55,7 @@ const steps = [
   }
 ];
 
-export const PitchSequence = ({ currentStep }: { currentStep: number }) => {
+export const PitchSequence = ({ currentStep, onClose }: { currentStep: number, onClose: () => void }) => {
   const step = steps[currentStep] || steps[0];
 
   const durations = [13, 8, 11, 9, 9, 7, 10];
@@ -77,8 +77,8 @@ export const PitchSequence = ({ currentStep }: { currentStep: number }) => {
         height: '100vh',
         textAlign: 'center',
         padding: '2rem',
-        background: 'rgba(0,0,0,0.8)',
-        backdropFilter: 'blur(20px)',
+        background: 'rgba(0,0,0,0.95)',
+        backdropFilter: 'blur(40px)',
         position: 'fixed',
         top: 0,
         left: 0,
@@ -86,6 +86,31 @@ export const PitchSequence = ({ currentStep }: { currentStep: number }) => {
         zIndex: 1000
       }}
     >
+      <button 
+        onClick={onClose}
+        style={{
+          position: 'fixed',
+          top: '2rem',
+          right: '2rem',
+          background: 'rgba(255,255,255,0.05)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          color: '#fff',
+          width: '44px',
+          height: '44px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          zIndex: 1001,
+          transition: 'all 0.2s ease'
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,0,0,0.2)')}
+        onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+      >
+        <X size={24} />
+      </button>
+
       {step.isVideo ? (
         <div style={{ width: '80%', maxWidth: '1000px', borderRadius: '12px', overflow: 'hidden', border: '2px solid var(--accent-color)', boxShadow: '0 0 50px rgba(0, 242, 255, 0.2)', marginBottom: '2rem' }}>
           <video 

@@ -336,51 +336,80 @@ export default function App() {
   const [view, setView] = useState<'landing' | 'human' | 'agent' | 'pitch'>('landing');
   const [pitchStep, setPitchStep] = useState(0);
   const [pitchAudio, setPitchAudio] = useState<HTMLAudioElement | null>(null);
+  const [pitchAbortController, setPitchAbortController] = useState<AbortController | null>(null);
+
+  const stopPitch = () => {
+    if (pitchAudio) {
+      pitchAudio.pause();
+      pitchAudio.currentTime = 0;
+    }
+    if (pitchAbortController) {
+      pitchAbortController.abort();
+    }
+    setView('landing');
+    setPitchStep(0);
+    setPitchAudio(null);
+    setPitchAbortController(null);
+  };
 
   const startPitch = () => {
     const audio = new Audio('/audio/pitch.mp3');
+    const controller = new AbortController();
+    
     audio.play().catch(e => console.error("Audio play failed:", e));
     setPitchAudio(audio);
+    setPitchAbortController(controller);
     setView('pitch');
   };
 
   useEffect(() => {
-    if (view === 'pitch' && pitchAudio) {
+    if (view === 'pitch' && pitchAudio && pitchAbortController) {
+      const signal = pitchAbortController.signal;
+
       const runPitch = async () => {
-        // Slide 0: Intro (Segments 1+2: 4s + 9s)
-        await new Promise(r => setTimeout(r, 13000));
-        setPitchStep(1);
-        // Slide 1: Problem (Segment 3: 8s)
-        await new Promise(r => setTimeout(r, 8000));
-        setPitchStep(2);
-        // Slide 2: Solution (Segment 4: 11s)
-        await new Promise(r => setTimeout(r, 11000));
-        setPitchStep(3);
-        // Slide 3: Demo Video (Segment 5: 9s)
-        await new Promise(r => setTimeout(r, 9000));
-        setPitchStep(4);
-        // Slide 4: Security (Segment 6: 9s)
-        await new Promise(r => setTimeout(r, 9000));
-        setPitchStep(5);
-        // Slide 5: Ecosystem (Segment 7: 7s)
-        await new Promise(r => setTimeout(r, 7000));
-        setPitchStep(6);
-        // Slide 6: Final (Segment 8: 10s)
-        await new Promise(r => setTimeout(r, 10000));
-        
-        pitchAudio.pause();
-        setView('landing');
-        setPitchStep(0);
-        setPitchAudio(null);
+        const sleep = (ms: number) => new Promise((resolve, reject) => {
+          const timeout = setTimeout(resolve, ms);
+          signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new Error('aborted'));
+          });
+        });
+
+        try {
+          // Slide 0: Intro (Segments 1+2: 4s + 9s)
+          await sleep(13000);
+          setPitchStep(1);
+          // Slide 1: Problem (Segment 3: 8s)
+          await sleep(8000);
+          setPitchStep(2);
+          // Slide 2: Solution (Segment 4: 11s)
+          await sleep(11000);
+          setPitchStep(3);
+          // Slide 3: Demo Video (Segment 5: 9s)
+          await sleep(9000);
+          setPitchStep(4);
+          // Slide 4: Security (Segment 6: 9s)
+          await sleep(9000);
+          setPitchStep(5);
+          // Slide 5: Ecosystem (Segment 7: 7s)
+          await sleep(7000);
+          setPitchStep(6);
+          // Slide 6: Final (Segment 8: 10s)
+          await sleep(10000);
+          
+          stopPitch();
+        } catch (e: any) {
+          if (e.message !== 'aborted') console.error(e);
+        }
       };
 
       runPitch();
 
       return () => {
-        pitchAudio.pause();
+        // Handled by stopPitch
       };
     }
-  }, [view, pitchAudio]);
+  }, [view, pitchAudio, pitchAbortController]);
 
   useEffect(() => {
     if (view === 'landing') {
@@ -491,7 +520,7 @@ export default function App() {
 
         {view === 'human' && <HumanView key="human" onBack={() => setView('landing')} />}
         {view === 'agent' && <AgentView key="agent" onBack={() => setView('landing')} />}
-        {view === 'pitch' && <PitchSequence key="pitch" currentStep={pitchStep} />}
+        {view === 'pitch' && <PitchSequence key="pitch" currentStep={pitchStep} onClose={stopPitch} />}
       </AnimatePresence>
 
       <div className="footer-links">
