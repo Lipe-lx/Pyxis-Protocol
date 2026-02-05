@@ -2,7 +2,7 @@ import { Connection, PublicKey, Transaction, SystemProgram } from '@solana/web3.
 import * as anchor from '@coral-xyz/anchor';
 const { BN } = anchor;
 
-export * from './clob-helpers';
+export * from './clob-helpers.ts';
 /**
  * Pyxis SDK ♠️
  * 
@@ -27,8 +27,8 @@ export class PyxisClient {
     });
     
     // Support for Anchor 0.30
-    if (!idl.address) idl.address = programId;
-    this.program = new anchor.Program(idl, provider);
+    const programAddress = idl.address || programId;
+    this.program = new anchor.Program({ ...idl, address: programAddress }, provider);
   }
 
   /**
@@ -119,6 +119,25 @@ export class PyxisClient {
         reporter: this.program.provider.publicKey,
         oracle: oraclePda,
         stakeVault: vaultPda,
+      })
+      .rpc();
+  }
+
+  /**
+   * Update oracle's metadata (endpoint or pricing)
+   */
+  public async updateOracle(
+    oraclePda: PublicKey,
+    newEndpoint: string | null = null,
+    newPriceSOL: number | null = null
+  ) {
+    const newPrice = newPriceSOL !== null ? new BN(newPriceSOL * 1000000000) : null;
+    
+    return await this.program.methods
+      .updateOracle(newEndpoint, newPrice)
+      .accounts({
+        authority: this.program.provider.publicKey,
+        oracle: oraclePda,
       })
       .rpc();
   }

@@ -13,16 +13,6 @@
         "Register a new oracle by minting an Oracle NFT",
         "Requires staking SOL as collateral"
       ],
-      "discriminator": [
-        13,
-        155,
-        179,
-        138,
-        169,
-        197,
-        129,
-        210
-      ],
       "accounts": [
         {
           "name": "authority",

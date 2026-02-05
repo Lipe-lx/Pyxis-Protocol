@@ -8,7 +8,7 @@ import { Keypair } from '@solana/web3.js';
 
 // In production, load this from ~/.config/solana/id.json
 const nodeKeypair = Keypair.generate(); 
-const ORACLE_ID = "8AufMHSUifpUu62ivSVBn7PfHBip7f5n8dhVNVyq24ws"; // Your NFT PDA
+const ORACLE_ID = "BGYD8TTDjkQeFX2BTymrF3mdMFCCdRGyj8pchBgze6TE"; // Your NEW Sovereign NFT PDA
 const BROKER_URL = "wss://pyxis-broker.lulipe-lx.workers.dev/connect";
 
 const worker = new PyxisLocalWorker(ORACLE_ID, nodeKeypair, BROKER_URL);
