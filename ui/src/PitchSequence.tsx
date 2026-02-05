@@ -99,7 +99,7 @@ export const PitchSequence = ({ currentStep }: { currentStep: number }) => {
         <motion.div 
           initial={{ width: 0 }}
           animate={{ width: '100%' }}
-          transition={{ duration: 8.5, ease: "linear" }}
+          transition={{ duration: 9.6, ease: "linear" }}
           style={{ height: '100%', background: 'var(--accent-color)' }}
         />
       </div>
