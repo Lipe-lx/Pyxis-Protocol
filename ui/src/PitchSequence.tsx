@@ -41,10 +41,10 @@ const steps = [
   },
   {
     id: 'partners',
-    title: 'ECOSYSTEM HUB',
-    subtitle: 'The Sovereign Stack',
+    title: 'GLOBAL MARKETPLACE',
+    subtitle: 'The Sovereign Rails',
     icon: <Terminal size={48} color="var(--accent-color)" />,
-    description: 'Integrated with SAID, Murkl, AgentMemory, and Sipher.'
+    description: 'Standardized protocols for seamless agent-to-agent data commerce.'
   },
   {
     id: 'final',

@@ -33,7 +33,6 @@ Pyxis is the orchestrator for the Solana DePIN and Agent ecosystem:
 - **Compute (DePIN)**: [Nosana](https://nosana.io) for native, serverless GPU/CPU execution.
 - **Storage (DePIN)**: [Shadow Drive](https://www.shdw.so/) for decentralized code and history persistence.
 - **Payments**: [x402 protocol](https://x402.org) for automated, per-query micro-settlements.
-- **Identity**: [SAID Protocol](https://saidprotocol.com) for verified provider trust badges.
 - **Security**: **The Watchman Protocol** for real-time audit and cryptographic proof-of-execution.
 
 ---
@@ -57,13 +56,9 @@ Pyxis-Protocol/
 
 ---
 
-## 🤝 Ecosystem Integrations (Strategic Partnerships)
+## 🤝 Open Collaboration
 
-Pyxis is the hub for a sovereign agentic stack. We are actively integrating with fellow Colosseum innovators:
-- **Identity & Trust**: Integrating with **SAID Protocol** to provide verified provider badges for Pyxis Oracle nodes.
-- **Privacy**: Exploring "Shielded Queries" using **Murkl's STARK verifier** to protect consumer intent.
-- **Persistence**: Using **AgentMemory** to store "Reputation Shards" for long-term node reliability tracking.
-- **Security**: Optional stealth settlements via **Sipher** for institutional-grade privacy.
+Pyxis is the hub for a sovereign agentic stack. We are building the rails for the future of decentralized data commerce on Solana.
 
 ---
 
