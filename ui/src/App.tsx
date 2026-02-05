@@ -335,12 +335,17 @@ const AgentView = ({ onBack }: { onBack: () => void }) => {
 export default function App() {
   const [view, setView] = useState<'landing' | 'human' | 'agent' | 'pitch'>('landing');
   const [pitchStep, setPitchStep] = useState(0);
+  const [pitchAudio, setPitchAudio] = useState<HTMLAudioElement | null>(null);
+
+  const startPitch = () => {
+    const audio = new Audio('/audio/pitch.mp3');
+    audio.play().catch(e => console.error("Audio play failed:", e));
+    setPitchAudio(audio);
+    setView('pitch');
+  };
 
   useEffect(() => {
-    if (view === 'pitch') {
-      const audio = new Audio('/audio/pitch.mp3');
-      audio.play().catch(e => console.error("Audio play failed:", e));
-
+    if (view === 'pitch' && pitchAudio) {
       const runPitch = async () => {
         // Slide 0: 9.75s
         await new Promise(r => setTimeout(r, 9750));
@@ -363,18 +368,19 @@ export default function App() {
         // Slide 6: 9.75s
         await new Promise(r => setTimeout(r, 9750));
         
-        audio.pause();
+        pitchAudio.pause();
         setView('landing');
         setPitchStep(0);
+        setPitchAudio(null);
       };
 
       runPitch();
 
       return () => {
-        audio.pause();
+        pitchAudio.pause();
       };
     }
-  }, [view]);
+  }, [view, pitchAudio]);
 
   useEffect(() => {
     if (view === 'landing') {
@@ -404,7 +410,7 @@ export default function App() {
         </a>
           <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
             <button 
-              onClick={() => setView('pitch')}
+              onClick={startPitch}
               className="footer-link" 
               style={{ 
                 background: 'var(--accent-color)', 
