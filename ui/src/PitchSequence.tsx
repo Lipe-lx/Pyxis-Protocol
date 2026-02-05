@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ShieldCheck, Cpu, Globe, Terminal, X } from 'lucide-react';
 import { PyxisLogo } from './PyxisLogo';
 
