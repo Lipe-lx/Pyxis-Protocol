@@ -338,17 +338,41 @@ export default function App() {
 
   useEffect(() => {
     if (view === 'pitch') {
-      const interval = setInterval(() => {
-        setPitchStep((s) => {
-          if (s >= 6) {
-            clearInterval(interval);
-            setView('landing');
-            return 0;
-          }
-          return s + 1;
-        });
-      }, 9600);
-      return () => clearInterval(interval);
+      const audio = new Audio('/audio/pitch.mp3');
+      audio.play().catch(e => console.error("Audio play failed:", e));
+
+      const runPitch = async () => {
+        // Slide 0: 9.75s
+        await new Promise(r => setTimeout(r, 9750));
+        setPitchStep(1);
+        // Slide 1: 9.75s
+        await new Promise(r => setTimeout(r, 9750));
+        setPitchStep(2);
+        // Slide 2: 9.75s
+        await new Promise(r => setTimeout(r, 9750));
+        setPitchStep(3);
+        // Slide 3 (VIDEO): 7.5s
+        await new Promise(r => setTimeout(r, 7500));
+        setPitchStep(4);
+        // Slide 4: 9.75s
+        await new Promise(r => setTimeout(r, 9750));
+        setPitchStep(5);
+        // Slide 5: 9.75s
+        await new Promise(r => setTimeout(r, 9750));
+        setPitchStep(6);
+        // Slide 6: 9.75s
+        await new Promise(r => setTimeout(r, 9750));
+        
+        audio.pause();
+        setView('landing');
+        setPitchStep(0);
+      };
+
+      runPitch();
+
+      return () => {
+        audio.pause();
+      };
     }
   }, [view]);
 

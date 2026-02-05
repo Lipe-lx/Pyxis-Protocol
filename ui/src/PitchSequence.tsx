@@ -26,10 +26,11 @@ const steps = [
   },
   {
     id: 'demo',
-    title: 'LIVE DISCOVERY',
-    subtitle: 'On-chain Transparency',
-    icon: <Users size={48} color="var(--accent-color)" />,
-    description: 'Human-agent discovery powered by real Devnet accounts.'
+    title: 'LIVE INTERFACE',
+    subtitle: 'Zero-DevOps in Action',
+    isVideo: true,
+    videoUrl: '/midia/demo.mp4',
+    description: 'Autonomous discovery and deployment demonstrated live.'
   },
   {
     id: 'security',
@@ -82,9 +83,24 @@ export const PitchSequence = ({ currentStep }: { currentStep: number }) => {
         zIndex: 1000
       }}
     >
-      <div className="pitch-icon-container" style={{ marginBottom: '2rem' }}>
-        {step.icon}
-      </div>
+      {step.isVideo ? (
+        <div style={{ width: '80%', maxWidth: '1000px', borderRadius: '12px', overflow: 'hidden', border: '2px solid var(--accent-color)', boxShadow: '0 0 50px rgba(0, 242, 255, 0.2)', marginBottom: '2rem' }}>
+          <video 
+            src={step.videoUrl} 
+            autoPlay 
+            muted 
+            playsInline 
+            onLoadedMetadata={(e) => {
+              (e.target as HTMLVideoElement).playbackRate = 2.0;
+            }}
+            style={{ width: '100%', display: 'block' }} 
+          />
+        </div>
+      ) : (
+        <div className="pitch-icon-container" style={{ marginBottom: '2rem' }}>
+          {step.icon}
+        </div>
+      )}
       <h1 style={{ fontSize: '4rem', fontWeight: 800, letterSpacing: '0.2em', margin: 0, color: '#fff' }}>
         {step.title}
       </h1>
@@ -97,9 +113,10 @@ export const PitchSequence = ({ currentStep }: { currentStep: number }) => {
 
       <div style={{ position: 'absolute', bottom: '4rem', width: '300px', height: '2px', background: 'rgba(255,255,255,0.1)' }}>
         <motion.div 
+          key={`bar-${currentStep}`}
           initial={{ width: 0 }}
           animate={{ width: '100%' }}
-          transition={{ duration: 9.6, ease: "linear" }}
+          transition={{ duration: currentStep === 3 ? 7.5 : 9.75, ease: "linear" }}
           style={{ height: '100%', background: 'var(--accent-color)' }}
         />
       </div>
