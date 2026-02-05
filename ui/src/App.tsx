@@ -180,8 +180,8 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
                 Endpoint: {oracle.account.mcpEndpoint}
               </p>
               <div className="stats" style={{ fontSize: '0.75rem', opacity: 0.8 }}>
+                <span>STAKE: {(oracle.account.stakeAmount / 1e9).toFixed(2)} / 0.10 SOL</span>
                 <span>REP: {oracle.account.reputationScore}</span>
-                <span>TXS: {oracle.account.queriesServed.toString()}</span>
                 <span className="p2p-badge" style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>• P2P LIVE</span>
               </div>
               <button 
