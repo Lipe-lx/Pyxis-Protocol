@@ -347,7 +347,7 @@ export default function App() {
           }
           return s + 1;
         });
-      }, 7000);
+      }, 8500);
       return () => clearInterval(interval);
     }
   }, [view]);
