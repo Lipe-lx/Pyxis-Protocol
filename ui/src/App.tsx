@@ -429,7 +429,7 @@ export default function App() {
       <div className="footer-links">
         <span>© 2026 PYXIS PROTOCOL</span>
         <span style={{ opacity: 0.3 }}>|</span>
-        <span>SOLANA MAINNET READY</span>
+        <span>SOLANA DEVNET ACTIVE</span>
       </div>
     </div>
   );
