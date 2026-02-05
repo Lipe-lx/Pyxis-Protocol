@@ -1,5 +1,7 @@
 # Pyxis Protocol ♠️
 
+> **🚀 LIVE DEMO: [https://pyxis-protocol.lulipe-lx.workers.dev/](https://pyxis-protocol.lulipe-lx.workers.dev/)**
+
 **The Oracle BaaS Platform — Zero-DevOps Infrastructure for the Agentic Data Economy**
 
 [! [Built for Colosseum Agent Hackathon](https://img.shields.io/badge/Colosseum-Agent%20Hackathon-blueviolet)](https://colosseum.com)
