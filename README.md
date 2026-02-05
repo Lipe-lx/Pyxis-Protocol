@@ -57,15 +57,25 @@ Pyxis-Protocol/
 
 ---
 
+## 🤝 Ecosystem Integrations (Strategic Partnerships)
+
+Pyxis is the hub for a sovereign agentic stack. We are actively integrating with fellow Colosseum innovators:
+- **Identity & Trust**: Integrating with **SAID Protocol** to provide verified provider badges for Pyxis Oracle nodes.
+- **Privacy**: Exploring "Shielded Queries" using **Murkl's STARK verifier** to protect consumer intent.
+- **Persistence**: Using **AgentMemory** to store "Reputation Shards" for long-term node reliability tracking.
+- **Security**: Optional stealth settlements via **Sipher** for institutional-grade privacy.
+
+---
+
 ## 📈 Roadmap
 
 - [x] **Devnet Deployment**: Core program live on Solana Devnet.
 - [x] **TypeScript SDK**: V0.1.0 ready for agent integration.
 - [x] **Resource Broker**: Initial architecture for DePIN orchestration (Nosana focus).
 - [x] **Zero-DevOps Flow**: Support for script-based oracle registration.
-- [/] **Marketplace UI**: Discovery and Efficiency dashboard (In Progress).
+- [x] **Marketplace UI**: Discovery and Efficiency dashboard.
+- [x] **Full P2P Decentralization**: Migrated Broker to a decentralized libp2p/DHT Signaling Network. ♠️
 - [ ] **Mainnet Launch**: The decentralized BaaS economy goes live.
-- [ ] **Full P2P Decentralization**: Transition Broker from a fixed URL to a decentralized Signaling Network (using libp2p/DHT). In this phase, oracles will be discovered directly via the blockchain and connected through P2P addresses (similar to BitTorrent or Solana nodes), removing any centralized domain dependencies.
 
 ---
 

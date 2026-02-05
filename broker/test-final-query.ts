@@ -7,7 +7,7 @@ import fs from 'fs';
  */
 
 const ORACLE_PDA = "BGYD8TTDjkQeFX2BTymrF3mdMFCCdRGyj8pchBgze6TE";
-const BROKER_URL = "https://pyxis-broker.lulipe-lx.workers.dev/query/" + ORACLE_PDA;
+const BROKER_URL = "http://localhost:3000/query/" + ORACLE_PDA;
 
 async function main() {
   console.log("♠️ Starting Final Production Test...");

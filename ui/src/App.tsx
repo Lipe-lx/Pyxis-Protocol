@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Cpu, ChevronLeft, ShieldCheck, Zap, Copy, Check, ExternalLink, Github, Loader2, Info } from 'lucide-react';
+import { User, Cpu, ChevronLeft, ShieldCheck, Zap, Copy, Check, ExternalLink, Github, Loader2, Info, Play } from 'lucide-react';
 import './index.css';
 import { Player } from '@remotion/player';
 import { ProtocolMotion } from './remotion/ProtocolMotion';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Program, AnchorProvider } from '@coral-xyz/anchor';
 import idl from './idl.json';
+import { PitchSequence } from './PitchSequence';
 
 // --- Types ---
 interface OracleData {
@@ -331,7 +332,24 @@ const AgentView = ({ onBack }: { onBack: () => void }) => {
 };
 
 export default function App() {
-  const [view, setView] = useState<'landing' | 'human' | 'agent'>('landing');
+  const [view, setView] = useState<'landing' | 'human' | 'agent' | 'pitch'>('landing');
+  const [pitchStep, setPitchStep] = useState(0);
+
+  useEffect(() => {
+    if (view === 'pitch') {
+      const interval = setInterval(() => {
+        setPitchStep((s) => {
+          if (s >= 5) {
+            clearInterval(interval);
+            setView('landing');
+            return 0;
+          }
+          return s + 1;
+        });
+      }, 7000);
+      return () => clearInterval(interval);
+    }
+  }, [view]);
 
   useEffect(() => {
     if (view === 'landing') {
@@ -359,11 +377,29 @@ export default function App() {
             <span className="brand-tagline">Oracle-as-a-Service</span>
           </div>
         </a>
-        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-           <a href={REPO_URL} target="_blank" rel="noreferrer" className="footer-link" style={{ opacity: 1, fontSize: '0.8rem' }}>
-            <Github size={16} /> <span className="brand-tagline" style={{ letterSpacing: '0.1em' }}>Docs</span>
-          </a>
-        </div>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+            <button 
+              onClick={() => setView('pitch')}
+              className="footer-link" 
+              style={{ 
+                background: 'var(--accent-color)', 
+                color: '#000', 
+                padding: '0.4rem 0.8rem', 
+                borderRadius: '4px',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              <Play size={14} fill="black" /> 🎬 PITCH MODE
+            </button>
+            <a href={REPO_URL} target="_blank" rel="noreferrer" className="footer-link" style={{ opacity: 1, fontSize: '0.8rem' }}>
+              <Github size={16} /> <span className="brand-tagline" style={{ letterSpacing: '0.1em' }}>Docs</span>
+            </a>
+          </div>
       </header>
 
       {view === 'landing' && (
@@ -424,6 +460,7 @@ export default function App() {
 
         {view === 'human' && <HumanView key="human" onBack={() => setView('landing')} />}
         {view === 'agent' && <AgentView key="agent" onBack={() => setView('landing')} />}
+        {view === 'pitch' && <PitchSequence key="pitch" currentStep={pitchStep} />}
       </AnimatePresence>
 
       <div className="footer-links">
