@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ShieldCheck, Zap, Cpu, Users, Globe, Terminal } from 'lucide-react';
+import { ShieldCheck, Cpu, Users, Globe, Terminal } from 'lucide-react';
 import { PyxisLogo } from './PyxisLogo';
 
 const steps = [

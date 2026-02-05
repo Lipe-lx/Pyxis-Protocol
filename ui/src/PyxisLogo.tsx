@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const PyxisLogo = ({ size = 32, color = 'var(--accent-color)' }: { size?: number, color?: string }) => {
   return (
     <svg 
