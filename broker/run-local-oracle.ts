@@ -1,4 +1,4 @@
-import { PyxisLocalWorker } from './local-worker';
+import { PyxisLocalWorker } from './local-worker.ts';
 import { Keypair } from '@solana/web3.js';
 
 /**

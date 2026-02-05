@@ -6,7 +6,6 @@
 import WebSocket from 'ws';
 import { Keypair } from '@solana/web3.js';
 import nacl from 'tweetnacl';
-import { decodeUTF8 } from 'tweetnacl-util';
 
 export class PyxisLocalWorker {
   private ws: WebSocket | null = null;
@@ -42,7 +41,7 @@ export class PyxisLocalWorker {
           
           // 🛡️ CRITICAL SECURITY: Signing the data locally with Ed25519
           const messageToSign = JSON.stringify(result.data);
-          const messageBytes = decodeUTF8(messageToSign);
+          const messageBytes = Buffer.from(messageToSign, 'utf-8');
           const signature = nacl.sign.detached(messageBytes, this.keypair.secretKey);
           
           const signedPayload = {
