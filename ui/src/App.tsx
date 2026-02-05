@@ -109,8 +109,8 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
         const accounts = await (program.account as any).oracle.all();
         console.log("Raw accounts fetched:", accounts);
         
-        // Map all oracles directly from the chain, no arbitrary domain filters
-        const validOracles = accounts.map((acc: any) => {
+        // Map all oracles directly from the chain
+        const mappedOracles = accounts.map((acc: any) => {
           const raw = acc.account;
           return {
             publicKey: acc.publicKey,
@@ -123,6 +123,18 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
               queriesServed: raw.queriesServed ?? raw.queries_served ?? 0,
             }
           };
+        });
+
+        // Filter out legacy or duplicate oracles for a clean production view
+        const validOracles = mappedOracles.filter((oracle: any) => {
+          const endpoint = oracle.account.mcpEndpoint || "";
+          const name = oracle.account.name || "";
+          // 1. Remove the legacy .ai mock endpoint
+          if (endpoint.includes("pyxis.ai")) return false;
+          // 2. Remove the duplicate 'AceP2PNode' (without dashes) to keep only the official 'Ace-P2P-Node'
+          if (name === "AceP2PNode") return false;
+          
+          return name.length > 0;
         });
 
         console.log("Oracles ready for display:", validOracles);
