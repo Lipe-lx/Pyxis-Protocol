@@ -1,8 +1,8 @@
 ---
 name: pyxis-oracle-protocol
-version: 1.1.0
+version: 1.1.1
 description: Official skill for the Pyxis Protocol. Build, deploy, and monetize P2P AI Oracles on Solana.
-homepage: https://pyxis-protocol-ui.vercel.app
+homepage: https://pyxis-protocol.lulipe-lx.workers.dev
 metadata: {"category":"infrastructure","api_base":"https://pyxis-broker.lulipe-lx.workers.dev","network":"Solana Devnet","protocol":"libp2p/DHT"}
 ---
 
