@@ -2,9 +2,10 @@
   --bg-color: #050505;
   --card-bg: #0a0a0c;
   --accent-color: #00f2ff;
+  --accent-glow: rgba(0, 242, 255, 0.4);
   --text-primary: #ffffff;
   --text-secondary: #a0a0a0;
-  --border-color: #1a1a1c;
+  --border-color: #2a2a2c;
   --glow-color: rgba(0, 242, 255, 0.15);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
@@ -21,10 +22,78 @@ body {
   overflow-x: hidden;
 }
 
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 1000;
+  filter: contrast(150%) brightness(100%);
+}
+
+/* Brand Identity Header */
+.brand-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background: linear-gradient(to bottom, rgba(5,5,5,0.8), transparent);
+  backdrop-filter: blur(10px);
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.brand-logo:hover {
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+.brand-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--accent-color);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #fff, var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-tagline {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 6rem 2rem 2rem;
 }
 
 /* Landing Split */
@@ -35,60 +104,85 @@ body {
   overflow: hidden;
   justify-content: center;
   align-items: center;
-  gap: 4rem;
+  gap: 2rem;
   background: transparent;
 }
 
 .landing-card {
-  width: 300px;
-  height: 380px;
-  background: rgba(5, 5, 5, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 2px; /* Ultra sharp minimalist */
+  width: 340px;
+  height: 420px;
+  background: rgba(15, 15, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 2.5rem;
   cursor: pointer;
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(30px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.landing-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent, rgba(0, 242, 255, 0.2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .landing-card:hover {
   border-color: var(--accent-color);
-  background: rgba(0, 242, 255, 0.02);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  transform: translateY(-10px) scale(1.02);
+  background: rgba(20, 20, 25, 0.9);
+  box-shadow: 0 20px 60px rgba(0, 242, 255, 0.15);
+  transform: translateY(-15px) scale(1.03);
 }
 
 .landing-card .icon-container {
   margin-bottom: 2.5rem;
-  opacity: 0.6;
+  opacity: 0.8;
+  padding: 1.5rem;
+  border-radius: 50%;
+  background: rgba(0, 242, 255, 0.05);
   transition: all 0.4s ease;
+  border: 1px solid rgba(0, 242, 255, 0.1);
 }
 
 .landing-card:hover .icon-container {
   opacity: 1;
+  background: rgba(0, 242, 255, 0.1);
   transform: scale(1.1);
+  box-shadow: 0 0 20px var(--glow-color);
 }
 
 .split-title {
-  font-size: 1rem; /* Even smaller title */
-  font-weight: 500;
+  font-size: 1.1rem;
+  font-weight: 700;
   margin-bottom: 1.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.2em;
   color: var(--text-primary);
+  text-align: center;
 }
 
 .split-desc {
-  font-size: 0.75rem; /* Ultra small minimalist description */
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  line-height: 2;
-  letter-spacing: 0.05em;
-  opacity: 0.8;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  text-align: center;
 }
 
 /* Geometric Scroll Effect */
@@ -99,7 +193,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,49 +201,50 @@ body {
 }
 
 .pyxis-box {
-  border: 1px solid rgba(0, 242, 255, 0.1);
+  border: 1px solid rgba(0, 242, 255, 0.15);
   position: absolute;
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Page Transitions */
-.page-enter {
-  opacity: 0;
-  transform: scale(0.98);
-}
-.page-enter-active {
-  opacity: 1;
-  transform: scale(1);
-  transition: opacity 500ms, transform 500ms;
-}
-.page-exit {
-  opacity: 1;
-  transform: scale(1);
-}
-.page-exit-active {
-  opacity: 0;
-  transform: scale(1.02);
-  transition: opacity 400ms, transform 400ms;
+/* Responsive Grid */
+@media (max-width: 768px) {
+  .split-screen {
+    flex-direction: column;
+    height: auto;
+    padding: 8rem 2rem 4rem;
+    gap: 2rem;
+  }
+  
+  .brand-tagline {
+    display: none;
+  }
+  
+  .landing-card {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    min-height: 380px;
+  }
 }
 
 .footer-links {
   position: fixed;
-  bottom: 2rem;
+  bottom: 1.5rem;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
   gap: 2rem;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
-  opacity: 0.4;
+  opacity: 0.6;
   transition: opacity 0.3s ease;
   letter-spacing: 0.1em;
   z-index: 10;
 }
 
 .footer-links:hover {
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .footer-link {
@@ -158,36 +253,39 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  transition: color 0.2s ease;
 }
 
 .footer-link:hover {
   color: var(--accent-color);
 }
 
-/* Card Styles */
+/* UI Elements */
 .primary-button {
   background: var(--accent-color);
-  color: black;
+  color: #000;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 0.8rem 1.2rem;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .primary-button:hover {
-  opacity: 0.9;
-  transform: scale(1.02);
+  box-shadow: 0 0 15px var(--accent-glow);
+  transform: translateY(-2px);
 }
 
 .back-button {
-  background: transparent;
+  background: rgba(255,255,255,0.05);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  border-radius: 8px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -197,7 +295,109 @@ body {
 
 .back-button:hover {
   border-color: var(--accent-color);
+  background: rgba(0, 242, 255, 0.05);
   color: var(--accent-color);
+}
+
+/* Oracle Cards */
+.oracle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.oracle-card {
+  background: rgba(20, 20, 25, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.8rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.oracle-card:hover {
+  border-color: var(--accent-color);
+  background: rgba(25, 25, 30, 0.8);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  transform: translateY(-8px);
+}
+
+.oracle-card .badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(0, 242, 255, 0.1);
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.oracle-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.oracle-card .owner {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.oracle-card .stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 1.2rem;
+  margin-top: 1.2rem;
+  font-size: 0.8rem;
+}
+
+/* Terminal */
+.terminal {
+  background: #08080a;
+  border: 1px solid #2a2a2c;
+  border-radius: 12px;
+  padding: 1.5rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  color: #d1d1d1;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+.terminal-header {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #1a1a1c;
+  padding-bottom: 0.75rem;
+  align-items: center;
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.terminal-content {
+  line-height: 1.7;
+}
+
+.terminal-prompt {
+  color: var(--accent-color);
+  font-weight: bold;
 }
 
 /* Feature Items */
@@ -205,6 +405,16 @@ body {
   display: flex;
   gap: 1.5rem;
   align-items: flex-start;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+  background: rgba(0, 242, 255, 0.03);
+  border-color: rgba(0, 242, 255, 0.2);
 }
 
 .copy-button {
@@ -228,134 +438,21 @@ body {
 }
 
 .instruction-box {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(10, 10, 15, 0.8);
   border: 1px solid var(--border-color);
-  padding: 1rem;
-  margin-top: 1rem;
-  border-radius: 4px;
-  font-family: 'Fira Code', monospace;
-  font-size: 0.8rem;
-  position: relative;
-}
-
-
-.feature-item .icon {
-  color: var(--accent-color);
-  flex-shrink: 0;
-}
-
-.feature-item h4 {
-  margin-bottom: 0.25rem;
-  font-size: 1.1rem;
-}
-
-.feature-item p {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-}
-
-/* Card Styles */
-.oracle-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  padding: 2.5rem;
   margin-top: 3rem;
-}
-
-.oracle-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
-.oracle-card:hover {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 20px var(--glow-color);
-  transform: translateY(-5px);
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.oracle-card .badge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: var(--accent-color);
-  color: black;
-  font-size: 0.7rem;
-  font-weight: bold;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
-.oracle-card h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.oracle-card .owner {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.oracle-card .stats {
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid var(--border-color);
-  padding-top: 1rem;
-  margin-top: 1rem;
-  font-size: 0.85rem;
-}
-
-/* Agent View Styles */
-.terminal {
-  background: #000;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 1rem;
-  font-family: 'Fira Code', monospace;
-  color: #00ff00;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.terminal-header {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #222;
-  padding-bottom: 0.5rem;
-}
-
-.terminal-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-
-.terminal-content {
-  line-height: 1.5;
-}
-
-.terminal-line {
-  margin-bottom: 0.25rem;
-}
-
-.terminal-prompt {
-  color: var(--accent-color);
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.fade-in {
-  animation: fadeIn 0.8s ease forwards;
-}

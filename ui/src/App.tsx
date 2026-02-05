@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Cpu, ChevronLeft, ShieldCheck, Zap, Copy, Check, ExternalLink, Github, Loader2 } from 'lucide-react';
+import { User, Cpu, ChevronLeft, ShieldCheck, Zap, Copy, Check, ExternalLink, Github, Loader2, Info } from 'lucide-react';
 import './index.css';
 import { Player } from '@remotion/player';
 import { ProtocolMotion } from './remotion/ProtocolMotion';
@@ -73,10 +73,13 @@ const PyxisBackground = () => {
           key={i}
           className="pyxis-box"
           style={{
-            width: `${200 + i * 100}px`,
-            height: `${200 + i * 100}px`,
-            transform: `rotate(${scrollY * 0.1 * i}deg) scale(${1 + (scrollY * 0.001 * i)})`,
-            opacity: 0.1 / i
+            width: `${250 + i * 120}px`,
+            height: `${250 + i * 120}px`,
+            transform: `rotate(${scrollY * 0.05 * i}deg) scale(${1 + (scrollY * 0.0005 * i)})`,
+            opacity: 0.25 / i,
+            borderWidth: i === 1 ? '2px' : '1px',
+            borderColor: i === 1 ? 'var(--accent-color)' : 'rgba(0, 242, 255, 0.15)',
+            boxShadow: i === 1 ? '0 0 30px rgba(0, 242, 255, 0.1)' : 'none'
           }}
         />
       ))}
@@ -155,11 +158,11 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
       exit={{ opacity: 0, y: 20 }}
       className="container"
     >
-      <header style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
+      <header style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '3rem' }}>
         <button onClick={onBack} className="back-button">
-          <ChevronLeft size={24} />
+          <ChevronLeft size={20} />
         </button>
-        <h1 className="split-title" style={{ fontSize: '1.2rem', margin: 0 }}>Human Discovery</h1>
+        <h1 className="split-title" style={{ fontSize: '1.2rem', margin: 0, letterSpacing: '0.1em' }}>Human Discovery</h1>
       </header>
 
       {loading ? (
@@ -172,24 +175,32 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
           {oracles.map((oracle) => (
             <div key={oracle.publicKey.toString()} className="oracle-card">
               <div className="badge">{oracle.account.dataType}</div>
-              <h3 style={{ fontSize: '1.1rem', letterSpacing: '0.05em' }}>{oracle.account.name}</h3>
+              <h3>{oracle.account.name}</h3>
               <div className="owner">
-                <User size={14} /> {oracle.account.authority.toString().slice(0, 4)}...{oracle.account.authority.toString().slice(-4)}
+                <User size={14} color="var(--accent-color)" /> {oracle.account.authority.toString().slice(0, 4)}...{oracle.account.authority.toString().slice(-4)}
               </div>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', minHeight: '3rem' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', minHeight: '3rem', lineHeight: 1.6 }}>
                 Endpoint: {oracle.account.mcpEndpoint}
               </p>
-              <div className="stats" style={{ fontSize: '0.75rem', opacity: 0.8 }}>
-                <span>STAKE: {(oracle.account.stakeAmount / 1e9).toFixed(2)} / 0.10 SOL</span>
-                <span>REP: {oracle.account.reputationScore}</span>
-                <span className="p2p-badge" style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>• P2P LIVE</span>
+              <div className="stats">
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ opacity: 0.6 }}>STAKE</span>
+                  <span style={{ color: '#fff', fontWeight: 600 }}>{(oracle.account.stakeAmount / 1e9).toFixed(2)} SOL</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ opacity: 0.6 }}>REPUTATION</span>
+                  <span style={{ color: 'var(--accent-color)', fontWeight: 600 }}>{oracle.account.reputationScore}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0.5rem' }}>
+                  <span className="p2p-badge" style={{ color: 'var(--accent-color)', fontWeight: 'bold', fontSize: '0.7rem', letterSpacing: '0.1em' }}>• P2P NETWORK LIVE</span>
+                </div>
               </div>
               <button 
                 className="primary-button" 
-                style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.8rem', letterSpacing: '0.1em' }}
+                style={{ width: '100%', marginTop: '1.5rem', fontSize: '0.8rem' }}
                 onClick={() => setShowSkill(true)}
               >
-                GET AGENT SKILL
+                GET PROTOCOL SKILL
               </button>
             </div>
           ))}
@@ -207,27 +218,34 @@ const HumanView = ({ onBack }: { onBack: () => void }) => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="instruction-box"
-            style={{ maxWidth: '600px', margin: '4rem auto 0', textAlign: 'center', backgroundColor: 'rgba(0, 242, 255, 0.02)' }}
+            style={{ maxWidth: '600px', margin: '4rem auto 0', textAlign: 'center' }}
           >
-            <h3 style={{ fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 500, letterSpacing: '0.1em' }}>
-              DEPLOY SKILL TO AGENT
-            </h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-              Send this command to your agent. This will inject the Pyxis Skill protocol.
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              <div style={{ background: 'var(--accent-color)', width: '24px', height: '24px', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Info size={14} color="black" />
+              </div>
+              <h3 style={{ fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                DEPLOY SKILL TO AGENT
+              </h3>
+            </div>
+            
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+              Transmit this command to your AI Agent's command line. This protocol injection will enable native Pyxis Oracle discovery and x402 payment handling.
             </p>
             
-            <div style={{ background: 'rgba(0, 242, 255, 0.05)', border: '1px solid rgba(0, 242, 255, 0.2)', padding: '0.8rem', borderRadius: '4px', marginBottom: '1.5rem', fontSize: '0.7rem', color: 'var(--accent-color)', opacity: 0.8 }}>
-              <strong>SECURITY NOTE:</strong> For absolute safety, you can paste the link or the command into your preferred AI chat (ChatGPT, Claude, etc.) to perform a security analysis before deploying it to your active agent.
+            <div style={{ background: 'rgba(0, 242, 255, 0.05)', border: '1px solid rgba(0, 242, 255, 0.2)', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', fontSize: '0.75rem', color: 'var(--accent-color)', display: 'flex', gap: '1rem', alignItems: 'center', textAlign: 'left' }}>
+              <ShieldCheck size={20} style={{ flexShrink: 0 }} />
+              <span><strong>SECURITY FIRST:</strong> You can inspect the source code at the provided link to verify the protocol's safety before deployment.</span>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', background: '#000', padding: '1rem', borderRadius: '4px', border: '1px solid #222' }}>
-                <code style={{ color: 'var(--accent-color)', fontSize: '0.75rem' }}>{skillCmd}</code>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', background: '#000', padding: '1.2rem', borderRadius: '8px', border: '1px solid #222' }}>
+                <code style={{ color: 'var(--accent-color)', fontSize: '0.8rem', fontFamily: 'JetBrains Mono, monospace' }}>{skillCmd}</code>
                 <CopyButton text={skillCmd} />
               </div>
 
-              <a href={fullPageUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)', fontSize: '0.65rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', opacity: 0.5 }}>
-                VIEW FULL SPECIFICATION <ExternalLink size={10} />
+              <a href={fullPageUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--accent-color)', fontSize: '0.75rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 600, letterSpacing: '0.05em' }}>
+                VIEW FULL PROTOCOL SPECIFICATION <ExternalLink size={12} />
               </a>
             </div>
           </motion.div>
@@ -249,34 +267,34 @@ const AgentView = ({ onBack }: { onBack: () => void }) => {
       exit={{ opacity: 0, y: 20 }}
       className="container"
     >
-      <header style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
+      <header style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '3rem' }}>
         <button onClick={onBack} className="back-button">
-          <ChevronLeft size={24} />
+          <ChevronLeft size={20} />
         </button>
-        <h1 className="split-title" style={{ fontSize: '1.2rem', margin: 0 }}>Agent Integration (BaaS)</h1>
+        <h1 className="split-title" style={{ fontSize: '1.2rem', margin: 0, letterSpacing: '0.1em' }}>Agent Protocol</h1>
       </header>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', fontWeight: 500 }}>Zero-DevOps Deployment</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '2.5rem', fontSize: '0.9rem', lineHeight: 1.8 }}>
-            Pyxis provides the execution layer for your intelligence. No servers to manage, no endpoints to host. 
-            Upload your logic, and we handle scaling, execution via DePIN (Nosana), and x402 monetization.
+          <h2 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', fontWeight: 600, color: '#fff' }}>Zero-DevOps Deployment</h2>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '2.5rem', fontSize: '1rem', lineHeight: 1.8 }}>
+            Pyxis provides the execution rails for agentic intelligence. 
+            Eliminate hosting bottlenecks—deploy your logic directly to decentralized compute.
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
             <div className="feature-item">
-              <ShieldCheck className="icon" size={20} />
+              <ShieldCheck className="icon" size={24} />
               <div>
-                <h4 style={{ fontSize: '1rem', fontWeight: 500 }}>Verifiable Execution</h4>
-                <p style={{ fontSize: '0.85rem' }}>The Watchman Protocol provides cryptographic proof that your logic ran as promised.</p>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#fff' }}>Verifiable Execution</h4>
+                <p style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>The Watchman Protocol provides cryptographic proof that your logic ran as specified on-chain.</p>
               </div>
             </div>
             <div className="feature-item">
-              <Zap className="icon" size={20} />
+              <Zap className="icon" size={24} />
               <div>
-                <h4 style={{ fontSize: '1rem', fontWeight: 500 }}>Dynamic Resource Routing</h4>
-                <p style={{ fontSize: '0.85rem' }}>Automated routing to the cheapest DePIN workers on Solana (Nosana, Shadow).</p>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#fff' }}>Dynamic Resource Routing</h4>
+                <p style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>Automated orchestration across Solana DePIN providers (Nosana, Shadow) for maximum cost-efficiency.</p>
               </div>
             </div>
           </div>
@@ -294,16 +312,16 @@ const AgentView = ({ onBack }: { onBack: () => void }) => {
               <span><span className="terminal-prompt">$</span> {skillCmd}</span>
               <CopyButton text={skillCmd} />
             </div>
-            <div className="terminal-line" style={{ color: '#666', marginBottom: '1rem' }}># Fetch and inject the Pyxis BaaS Skill</div>
+            <div className="terminal-line" style={{ color: '#555', marginBottom: '1.2rem', fontSize: '0.75rem' }}># Initialize Pyxis OaaS Skill environment</div>
             
             <div className="terminal-line" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span><span className="terminal-prompt">$</span> {deployCmd}</span>
               <CopyButton text={deployCmd} />
             </div>
-            <div className="terminal-line" style={{ color: '#666', marginBottom: '1rem' }}># Deploy oracle logic directly to DePIN</div>
+            <div className="terminal-line" style={{ color: '#555', marginBottom: '1.2rem', fontSize: '0.75rem' }}># Direct-to-DePIN orchestration (Solana)</div>
 
             <div className="terminal-line"><span className="terminal-prompt">$</span> pyxis balance --net-profit</div>
-            <div className="terminal-line" style={{ color: '#666' }}># Track earnings after infra costs</div>
+            <div className="terminal-line" style={{ color: '#555', fontSize: '0.75rem' }}># Real-time yield monitoring (x402)</div>
             <div className="terminal-line"><span className="terminal-prompt">$</span> _</div>
           </div>
         </div>
@@ -317,19 +335,39 @@ export default function App() {
 
   useEffect(() => {
     if (view === 'landing') {
-      document.body.style.height = '200vh';
+      document.body.style.height = '100vh';
+      document.body.style.overflow = 'hidden';
     } else {
       document.body.style.height = 'auto';
+      document.body.style.overflow = 'auto';
       window.scrollTo(0, 0);
     }
   }, [view]);
 
   return (
     <div className="app">
+      <div className="noise-overlay" />
       <PyxisBackground />
       
+      <header className="brand-header">
+        <a href="/" className="brand-logo" onClick={(e) => { e.preventDefault(); setView('landing'); }}>
+          <div className="brand-logo-icon">
+            <Zap size={18} color="black" fill="black" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <span className="brand-name">Pyxis Protocol</span>
+            <span className="brand-tagline">Oracle-as-a-Service</span>
+          </div>
+        </a>
+        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+           <a href={REPO_URL} target="_blank" rel="noreferrer" className="footer-link" style={{ opacity: 1, fontSize: '0.8rem' }}>
+            <Github size={16} /> <span className="brand-tagline" style={{ letterSpacing: '0.1em' }}>Docs</span>
+          </a>
+        </div>
+      </header>
+
       {view === 'landing' && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -2, opacity: 0.1 }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -2, opacity: 0.15 }}>
            <Player
             component={ProtocolMotion}
             durationInFrames={150}
@@ -352,27 +390,34 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
             className="split-screen"
-            style={{ position: 'fixed', top: 0, left: 0 }}
           >
-            <div className="landing-card" onClick={() => setView('human')}>
+            <motion.div 
+              whileHover={{ y: -10 }}
+              className="landing-card" 
+              onClick={() => setView('human')}
+            >
               <div className="icon-container">
                 <User size={32} color="var(--accent-color)" />
               </div>
-              <h2 className="split-title">I'M A HUMAN</h2>
-              <p className="split-desc" style={{ textAlign: 'center' }}>
-                Identify elite data feeds and obtain precise instructions for your AI agent.
+              <h2 className="split-title">HUMAN INTERFACE</h2>
+              <p className="split-desc">
+                Discover elite data feeds and obtain integration protocols for your agentic workflows.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="landing-card" onClick={() => setView('agent')}>
+            <motion.div 
+              whileHover={{ y: -10 }}
+              className="landing-card" 
+              onClick={() => setView('agent')}
+            >
               <div className="icon-container">
                 <Cpu size={32} color="var(--accent-color)" />
               </div>
-              <h2 className="split-title">I'M AN AGENT</h2>
-              <p className="split-desc" style={{ textAlign: 'center' }}>
-                Integrate with the Pyxis Protocol to offer data services and handle requests.
+              <h2 className="split-title">AGENT PROTOCOL</h2>
+              <p className="split-desc">
+                Deploy intelligence to DePIN. Zero-DevOps infrastructure for resource-aware oracles.
               </p>
-            </div>
+            </motion.div>
           </motion.div>
         )}
 
@@ -381,11 +426,11 @@ export default function App() {
       </AnimatePresence>
 
       <div className="footer-links">
-        <a href={REPO_URL} target="_blank" rel="noreferrer" className="footer-link">
-          <Github size={12} /> GITHUB
-        </a>
-        <span style={{ cursor: 'default' }}>OPEN SOURCE PROTOCOL</span>
+        <span>© 2026 PYXIS PROTOCOL</span>
+        <span style={{ opacity: 0.3 }}>|</span>
+        <span>SOLANA MAINNET READY</span>
       </div>
     </div>
   );
 }
+
